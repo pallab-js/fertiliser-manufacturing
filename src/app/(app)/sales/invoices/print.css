@@ -1,0 +1,23 @@
+/* Invoice print (FR-027): drop app chrome, force a white paper document. */
+@media print {
+  aside,
+  header,
+  .no-print {
+    display: none !important;
+  }
+  [class*="lg:pl-64"] {
+    padding-left: 0 !important;
+  }
+  * {
+    color: #000 !important;
+    background: transparent !important;
+    border-color: #bbb !important;
+  }
+  .invoice-print {
+    border: 1px solid #999 !important;
+    box-shadow: none !important;
+  }
+  a {
+    text-decoration: none !important;
+  }
+}

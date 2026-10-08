@@ -1,0 +1,390 @@
+@import "tailwindcss";
+
+/* ============================================================
+   DESIGN.md token system (docs/ui-ux-guide.md §2)
+   Source of truth: /DESIGN.md — never invent off-token styles.
+   ============================================================ */
+@theme {
+  /* Colors */
+  --color-primary: #5865f2; /* Blurple — actions, active indicators, brand */
+  --color-on-primary: #ffffff;
+  --color-green: #35ed7e; /* ONE highest-intent action per screen */
+  --color-magenta: #ec48bd; /* accents, badges, gradient panels */
+  --color-link: #00b0f4; /* inline links on dark */
+  --color-canvas: #0a0d3a; /* page base */
+  --color-surface-indigo: #1e2353; /* raised cards, table headers, ghost buttons */
+  --color-surface-onyx: #23272a; /* dividers, hairlines */
+  --color-surface-black: #000000; /* showcase bands */
+  --color-ink: #ffffff;
+  --color-ink-dark: #000000;
+  --color-muted: #333333; /* secondary text on LIGHT surfaces only */
+  --color-hairline: #23272a;
+
+  /* Radii (DESIGN.md rounded scale) */
+  --radius-xs: 6px;
+  --radius-sm: 12px;
+  --radius-md: 14px;
+  --radius-lg: 16px;
+  --radius-xl: 40px;
+  --radius-pill: 50px;
+  --radius-jumbo: 120px;
+
+  /* Type — Hanken Grotesk (display) + Inter (body): DESIGN.md's
+     open-source substitutes for ABC Ginto Nord / ggsans, via next/font */
+  --font-display: var(--font-hanken), ui-sans-serif, sans-serif;
+  --font-body: var(--font-inter), ui-sans-serif, sans-serif;
+
+  /* Display scale (DESIGN.md typography) */
+  --text-display-xl: 82px;
+  --text-display-xl--line-height: 1;
+  --text-display-lg: 62px;
+  --text-display-lg--line-height: 1.05;
+  --text-display-md: 56px;
+  --text-display-md--line-height: 1.05;
+  --text-heading-lg: 48px;
+  --text-heading-lg--line-height: 1.1;
+  --text-heading-sm: 22px;
+  --text-heading-sm--line-height: 1.2;
+  --text-body-lg: 20px;
+  --text-body-lg--line-height: 1.4;
+
+  /* The one permitted shadow (DESIGN.md level 1 — violet-tinted diffuse) */
+  --shadow-float: 0 3px 68px rgba(69, 42, 124, 0.1);
+
+  /* Signature gradient stops */
+  --animate-mesh: mesh 18s ease-in-out infinite alternate;
+}
+
+@keyframes mesh {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+
+  /* Focus: link-cyan ring on every interactive element (a11y) */
+  :focus-visible {
+    outline: 2px solid var(--color-link);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+  }
+}
+
+/* ============================================================
+   Component recipes (docs/ui-ux-guide.md §3)
+   ============================================================ */
+@layer components {
+  /* --- Buttons (exact DESIGN.md specs) --- */
+  .btn-primary,
+  .btn-green,
+  .btn-white,
+  .btn-ghost,
+  .btn-ghost-sm {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: filter 0.15s ease;
+    white-space: nowrap;
+    /* touch targets ≥44px on tablet (DESIGN.md) */
+    min-height: 44px;
+  }
+  .btn-primary:hover,
+  .btn-ghost:hover,
+  .btn-ghost-sm:hover {
+    filter: brightness(1.12);
+  }
+  .btn-primary:active,
+  .btn-green:active,
+  .btn-white:active,
+  .btn-ghost:active,
+  .btn-ghost-sm:active {
+    filter: brightness(0.92);
+  }
+  .btn-primary:disabled,
+  .btn-green:disabled,
+  .btn-white:disabled,
+  .btn-ghost:disabled,
+  .btn-ghost-sm:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: none;
+  }
+
+  .btn-primary {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    font-size: 18px;
+    border-radius: var(--radius-sm);
+    padding: 20px 24px;
+  }
+  .btn-green {
+    background: var(--color-green);
+    color: var(--color-ink-dark);
+    font-size: 18px;
+    border-radius: var(--radius-sm);
+    padding: 12px 24px;
+  }
+  .btn-white {
+    background: var(--color-ink);
+    color: var(--color-ink-dark);
+    font-size: 16px;
+    border-radius: var(--radius-lg);
+    padding: 8px 16px;
+  }
+  .btn-ghost {
+    background: var(--color-surface-indigo);
+    color: var(--color-ink);
+    font-size: 16px;
+    border-radius: var(--radius-lg);
+    padding: 16px;
+  }
+  .btn-ghost-sm {
+    background: var(--color-surface-indigo);
+    color: var(--color-ink);
+    font-size: 14px;
+    border-radius: var(--radius-xs);
+    padding: 12px 32px;
+  }
+
+  /* --- Cards / surfaces --- */
+  .panel {
+    background: var(--color-surface-indigo);
+    color: var(--color-ink);
+    border-radius: var(--radius-xl);
+    padding: 32px;
+  }
+  .panel-flat {
+    background: var(--color-canvas);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-lg);
+  }
+  .panel-gradient {
+    background: linear-gradient(
+      120deg,
+      var(--color-magenta) 0%,
+      var(--color-primary) 55%,
+      #5b2fb8 100%
+    );
+    color: var(--color-ink);
+    border-radius: var(--radius-xl);
+    padding: 40px;
+  }
+  .stat-card {
+    background: var(--color-primary);
+    color: var(--color-ink);
+    border-radius: var(--radius-xl);
+    padding: 32px;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-card--hero {
+    background: linear-gradient(135deg, var(--color-magenta), var(--color-primary));
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    background: var(--color-magenta);
+    color: var(--color-ink);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    border-radius: var(--radius-lg);
+    padding: 4px 12px;
+  }
+  .badge-neutral {
+    background: var(--color-surface-onyx);
+    color: var(--color-ink);
+  }
+
+  /* --- Forms --- */
+  .field-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: rgb(255 255 255 / 0.8);
+    margin-bottom: 8px;
+  }
+  .input {
+    width: 100%;
+    background: var(--color-surface-indigo);
+    color: var(--color-ink);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    font-size: 16px;
+    font-family: var(--font-body);
+  }
+  .input::placeholder {
+    color: rgb(255 255 255 / 0.45);
+  }
+  .input:focus {
+    border-color: var(--color-primary);
+    outline: 2px solid var(--color-link);
+    outline-offset: 1px;
+  }
+  .input[aria-invalid="true"] {
+    border-color: var(--color-magenta);
+  }
+  .field-error {
+    color: var(--color-magenta);
+    font-size: 14px;
+    margin-top: 6px;
+  }
+  select.input option {
+    background: var(--color-surface-indigo);
+  }
+
+  /* --- Data table (ex-data-table-cell) --- */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+  }
+  .data-table thead th {
+    background: var(--color-surface-indigo);
+    color: var(--color-ink);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    text-align: left;
+    padding: 12px 16px;
+  }
+  .data-table tbody td {
+    font-size: 16px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--color-hairline);
+  }
+  .data-table tbody tr:hover td {
+    background: rgb(30 35 83 / 0.5);
+  }
+  .data-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+  .data-table .num {
+    text-align: right;
+  }
+  .table-wrap {
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  /* --- Toast (ex-toast) --- */
+  .toast {
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-lg);
+    padding: 12px 16px;
+    box-shadow: var(--shadow-float);
+    font-size: 16px;
+  }
+
+  /* --- Empty state (ex-empty-state-card) --- */
+  .empty-state {
+    background: var(--color-canvas);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-xl);
+    padding: 40px;
+    text-align: center;
+  }
+
+  /* --- Sidebar nav row (ex-app-shell-row) --- */
+  .nav-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    border-left: 3px solid transparent;
+    transition: background 0.15s ease;
+    min-height: 44px;
+  }
+  .nav-row:hover {
+    background: rgb(30 35 83 / 0.5);
+  }
+  .nav-row.active {
+    background: var(--color-surface-indigo);
+    border-left-color: var(--color-primary);
+  }
+
+  /* --- Signature gradient mesh (login + dashboard header) --- */
+  .mesh-gradient {
+    background:
+      radial-gradient(
+        at 20% 30%,
+        rgb(88 101 242 / 0.55) 0%,
+        transparent 50%
+      ),
+      radial-gradient(at 80% 20%, rgb(236 72 189 / 0.45) 0%, transparent 50%),
+      radial-gradient(at 60% 80%, rgb(124 58 237 / 0.4) 0%, transparent 55%),
+      linear-gradient(120deg, #1a1f6b, var(--color-canvas));
+    background-size: 200% 200%;
+    animation: var(--animate-mesh);
+  }
+
+  /* --- Skeleton (loading state) --- */
+  .skeleton {
+    background: var(--color-surface-indigo);
+    border-radius: var(--radius-sm);
+    animation: pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    50% {
+      opacity: 0.45;
+    }
+  }
+
+  /* --- Print (invoice & reports) --- */
+  @media print {
+    .no-print {
+      display: none !important;
+    }
+    body {
+      background: #fff;
+      color: #000;
+    }
+  }
+}
