@@ -30,6 +30,16 @@ jobs:
       - name: Run build
         run: npm run build
 
+      - name: Migrate test DB
+        run: npm run db:migrate
+        env:
+          NOTER_DB: ${{ runner.temp }}/noter-test.db
+
+      - name: Seed test DB
+        run: npm run db:seed
+        env:
+          NOTER_DB: ${{ runner.temp }}/noter-test.db
+
       - name: Run db:check
         run: npm run db:check
         env:
