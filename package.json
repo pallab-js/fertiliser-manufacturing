@@ -2,6 +2,25 @@
   "name": "fertilizer-msme-manager",
   "version": "0.1.0",
   "private": true,
+  "description": "Production, inventory, QC, purchases and GST invoicing for a fertilizer manufacturing MSME unit. Built with Next.js 16, Tailwind 4, TypeScript, and SQLite.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pallab-js/fertiliser-manufacturing.git"
+  },
+  "keywords": [
+    "fertilizer",
+    "manufacturing",
+    "msme",
+    "gst",
+    "invoicing",
+    "inventory",
+    "production",
+    "qc",
+    "nextjs",
+    "typescript",
+    "sqlite"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
