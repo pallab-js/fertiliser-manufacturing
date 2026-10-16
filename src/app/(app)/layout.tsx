@@ -1,8 +1,9 @@
 import { Shell } from "@/components/shell/shell";
 import { requireUser } from "@/lib/guard";
 
-// Every authenticated route reads the session cookie + DB — always dynamic.
-export const instant = false;
+// Session-protected routes render at request time (never prerendered) so the
+// Date.now() session-expiry check inside verifySessionCookie is legal.
+export const dynamic = "force-dynamic";
 
 export default async function AppLayout({
   children,

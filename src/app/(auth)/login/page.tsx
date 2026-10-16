@@ -2,8 +2,9 @@ import { redirect } from "next/navigation";
 import { getSession } from "@/lib/guard";
 import { LoginForm } from "./login-form";
 
-// Reads the session cookie — always dynamic.
-export const instant = false;
+// Session check runs at request time (never prerendered) so Date.now() in
+// verifySessionCookie is legal.
+export const dynamic = "force-dynamic";
 
 export default async function LoginPage() {
   const session = await getSession();
