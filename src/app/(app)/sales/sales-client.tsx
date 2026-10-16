@@ -51,6 +51,7 @@ export function NewSoButton({
   const [handled, setHandled] = useState<ActionState>(null);
   const [customerId, setCustomerId] = useState("");
   const [pos, setPos] = useState(companyStateCode);
+  const [posFilter, setPosFilter] = useState("");
   const [lines, setLines] = useState<Line[]>([emptyLine(0)]);
   const [nextKey, setNextKey] = useState(1);
 
@@ -68,6 +69,16 @@ export function NewSoButton({
   const setLine = (key: number, patch: Partial<Line>) =>
     setLines((ls) => ls.map((l) => (l.key === key ? { ...l, ...patch } : l)));
   const intra = pos === companyStateCode;
+
+  // Per-line stock warnings: pure function of lines + items (computed at render).
+  const lineWarnings: Record<number, string> = {};
+  for (const l of lines) {
+    const item = items.find((i) => String(i.id) === l.item_id);
+    const qty = Number(l.qty);
+    if (item && Number.isFinite(qty) && qty > 0 && qty > item.dispatchable) {
+      lineWarnings[l.key] = `Only ${item.dispatchable} ${item.unit} dispatchable — requested ${qty}`;
+    }
+  }
 
   return (
     <>
@@ -98,17 +109,35 @@ export function NewSoButton({
             label="Place of supply"
             hint={intra ? "Intra-state · CGST + SGST" : "Inter-state · IGST"}
           >
+            <Input
+              type="text"
+              placeholder="Filter states…"
+              value={posFilter}
+              onChange={(e) => setPosFilter(e.target.value)}
+              className="max-w-xs mb-2"
+            />
             <Select
               name="place_of_supply"
               value={pos}
               onChange={(e) => setPos(e.target.value)}
               error={err.place_of_supply}
             >
-              {STATES.map((s) => (
-                <option key={s.code} value={s.code}>
-                  {s.code} — {s.name}
+              {STATES.filter((s) =>
+                `${s.code} ${s.name}`.toLowerCase().includes(posFilter.toLowerCase()),
+              )
+                .slice(0, 20)
+                .map((s) => (
+                  <option key={s.code} value={s.code}>
+                    {s.code} — {s.name}
+                  </option>
+                ))}
+              {posFilter && STATES.filter((s) =>
+                `${s.code} ${s.name}`.toLowerCase().includes(posFilter.toLowerCase()),
+              ).length > 20 ? (
+                <option disabled>
+                  … more matches (keep typing to narrow)
                 </option>
-              ))}
+              ) : null}
             </Select>
           </Field>
 
@@ -172,6 +201,11 @@ export function NewSoButton({
                     {item ? (
                       <span className="self-center text-xs text-ink/40">GST {item.gstRate}%</span>
                     ) : null}
+                    {lineWarnings[l.key] ? (
+                      <span className="self-center text-xs text-magenta" role="alert">
+                        {lineWarnings[l.key]}
+                      </span>
+                    ) : null}
                   </div>
                 );
               })}
@@ -223,7 +257,7 @@ export function IssueInvoiceButton({ soId }: { soId: number }) {
       }}
     >
       <input type="hidden" name="so_id" value={soId} />
-      <Button type="submit" variant="green" disabled={pending}>
+      <Button type="submit" variant="primary" disabled={pending}>
         {pending ? "Issuing…" : "Issue GST invoice"}
       </Button>
       <Toast message={state?.ok ? state.toast : state?.error} error={!state?.ok} />
@@ -298,7 +332,7 @@ export function RecordPaymentForm({ invoiceId }: { invoiceId: number }) {
 
 export function PrintButton() {
   return (
-    <button className="btn-green no-print" onClick={() => window.print()}>
+    <button className="btn-ghost-sm no-print" onClick={() => window.print()}>
       Print
     </button>
   );

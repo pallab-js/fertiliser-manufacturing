@@ -248,9 +248,32 @@ export function AddQcForm({ batchId }: { batchId: number }) {
       </div>
       <Field
         label="Parameters (JSON)"
-        hint='e.g. {"moisture": 2.1, "granule_strength": 3.4}'
+        hint='e.g. {"moisture": 2.1, "granule_strength": 3.4, "npk_assay": 19.1}'
         error={err.parameters}
       >
+        <div className="flex gap-2 mb-2">
+          <button
+            type="button"
+            className="btn-ghost-sm text-xs"
+            onClick={() => {
+              // Find the input and set its value
+              const el = document.querySelector('input[name="parameters"]');
+              if (el) (el as HTMLInputElement).value = JSON.stringify({ moisture: 2.1, granule_strength: 3.4, npk_assay: 19.1 });
+            }}
+          >
+            NPK example
+          </button>
+          <button
+            type="button"
+            className="btn-ghost-sm text-xs"
+            onClick={() => {
+              const el = document.querySelector('input[name="parameters"]');
+              if (el) (el as HTMLInputElement).value = JSON.stringify({ moisture: 1.8, granule_strength: 2.9, ph: 6.8 });
+            }}
+          >
+            Urea example
+          </button>
+        </div>
         <Input name="parameters" defaultValue="{}" className="input font-mono" error={err.parameters} />
       </Field>
       {state?.error ? <p className="field-error">{state.error}</p> : null}
