@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { db, inTx } from "@/db";
 import { withRole, zodFieldErrors } from "@/lib/guard";
+import { audit } from "@/lib/audit";
 
 const formulaSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(120),
@@ -62,11 +63,19 @@ function replaceComponents(formulaId: number, comps: { item_id: number; qty: num
   for (const c of comps) insert.run(formulaId, c.item_id, c.qty);
 }
 
-export const saveFormula = withRole("admin", async (_user, formData) => {
+export const saveFormula = withRole("admin", async (user, formData) => {
   const id = Number(formData.get("id")); // 0 = create
   const result = validate(readFormData(formData));
   if ("errors" in result) return { ok: false, fieldErrors: result.errors };
   const d = result.data;
+
+  let before: Record<string, unknown> | undefined;
+  if (id > 0) {
+    before = db
+      .prepare("SELECT name, item_id, active FROM formula WHERE id = ?")
+      .get(id) as Record<string, unknown> | undefined;
+    if (!before) return { ok: false, error: "Formula not found" };
+  }
 
   inTx(() => {
     if (id > 0) {
@@ -88,19 +97,45 @@ export const saveFormula = withRole("admin", async (_user, formData) => {
     }
   });
 
+  await audit({
+    actorUserId: user.userId,
+    actorUsername: user.username,
+    action: id > 0 ? "update" : "create",
+    entityType: "formula",
+    entityId: id > 0 ? id : undefined,
+    before: before ?? null,
+    after: { name: d.name, item_id: d.item_id },
+  });
+
   revalidatePath("/formulas");
   return { ok: true, toast: id > 0 ? `${d.name} saved` : `Formula ${d.name} created` };
 });
 
 /** Deactivate instead of delete — batches keep referencing history. */
-export const setFormulaActive = withRole("admin", async (_user, formData) => {
+export const setFormulaActive = withRole("admin", async (user, formData) => {
   const id = Number(formData.get("id"));
   const active = formData.get("active") === "1" ? 1 : 0;
   if (!Number.isInteger(id) || id < 1) return { ok: false, error: "Not found" };
 
+  const before = db
+    .prepare("SELECT active FROM formula WHERE id = ?")
+    .get(id) as { active: number } | undefined;
+  if (!before) return { ok: false, error: "Not found" };
+
   db.prepare(
     "UPDATE formula SET active = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ','now') WHERE id = ?",
   ).run(active, id);
+
+  await audit({
+    actorUserId: user.userId,
+    actorUsername: user.username,
+    action: active === 1 ? "reactivate" : "deactivate",
+    entityType: "formula",
+    entityId: id,
+    before: { active: before.active },
+    after: { active },
+  });
+
   revalidatePath("/formulas");
   revalidatePath(`/formulas/${id}`);
   return { ok: true, toast: active ? "Formula reactivated" : "Formula deactivated" };

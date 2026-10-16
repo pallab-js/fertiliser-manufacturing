@@ -67,10 +67,18 @@ export function zodFieldErrors(err: z.ZodError): Record<string, string> {
 
 export async function cookieOptions() {
   const h = await headers();
+  const isHttps = h.get("x-forwarded-proto") === "https";
+  const isDev = process.env.NODE_ENV === "development";
+  // Secure flag: required over HTTPS (HSTS enforces upgrade), optional override
+  // via SESSION_COOKIE_SECURE=false for plain-HTTP local dev only.
+  const secure =
+    process.env.SESSION_COOKIE_SECURE === "false"
+      ? false
+      : isHttps || !isDev;
   return {
     httpOnly: true,
     sameSite: "lax" as const,
     path: "/",
-    secure: h.get("x-forwarded-proto") === "https",
+    secure,
   };
 }

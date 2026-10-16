@@ -1,4 +1,4 @@
-import { db, inTx, DomainError } from "@/db";
+import { db, inTx, DomainError, withUniqueRetry } from "@/db";
 import { applyMovement } from "@/lib/stock";
 import { financialYear, nowIso } from "@/lib/dates";
 
@@ -40,16 +40,20 @@ export function startBatch(input: {
       .all(input.formulaId) as { item_id: number; qty: number }[];
     if (comps.length === 0) throw new DomainError("Formula has no components");
 
-    const batchNo = nextBatchNo();
-    const id = Number(
-      db
-        .prepare(
-          `INSERT INTO batch (batch_no, formula_id, planned_qty, status, started_at, notes, created_by)
-           VALUES (?, ?, ?, 'open', ?, ?, ?)`,
-        )
-        .run(batchNo, input.formulaId, input.plannedQty, nowIso(), input.notes, input.userId)
-        .lastInsertRowid,
-    );
+    let batchNo = "";
+    let id = 0;
+    withUniqueRetry(() => {
+      batchNo = nextBatchNo();
+      id = Number(
+        db
+          .prepare(
+            `INSERT INTO batch (batch_no, formula_id, planned_qty, status, started_at, notes, created_by)
+             VALUES (?, ?, ?, 'open', ?, ?, ?)`,
+          )
+          .run(batchNo, input.formulaId, input.plannedQty, nowIso(), input.notes, input.userId)
+          .lastInsertRowid,
+      );
+    });
     const snap = db.prepare(
       "INSERT INTO batch_consumption (batch_id, item_id, planned_qty, actual_qty) VALUES (?, ?, ?, 0)",
     );

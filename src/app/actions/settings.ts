@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { db } from "@/db";
 import { withRole, zodFieldErrors, type ActionState } from "@/lib/guard";
+import { audit } from "@/lib/audit";
 
 const settingsSchema = z.object({
   name: z.string().trim().min(1, "Company name is required").max(120),
@@ -25,7 +26,7 @@ const settingsSchema = z.object({
     .max(10_000_000),
 });
 
-export const saveSettings = withRole("admin", async (_user, formData) => {
+export const saveSettings = withRole("admin", async (user, formData) => {
   const parsed = settingsSchema.safeParse({
     name: formData.get("name"),
     address: formData.get("address") ?? "",
@@ -38,6 +39,10 @@ export const saveSettings = withRole("admin", async (_user, formData) => {
   if (!parsed.success) return { ok: false, fieldErrors: zodFieldErrors(parsed.error) };
 
   const d = parsed.data;
+  const before = db
+    .prepare("SELECT name, gstin, state_code, invoice_prefix FROM company_settings WHERE id = 1")
+    .get() as Record<string, unknown> | undefined;
+
   db.prepare(
     `UPDATE company_settings SET name = ?, address = ?, gstin = ?, state_code = ?,
        state_name = ?, invoice_prefix = ?, monthly_target_qty = ?
@@ -51,6 +56,21 @@ export const saveSettings = withRole("admin", async (_user, formData) => {
     d.invoice_prefix,
     d.monthly_target_qty,
   );
+
+  await audit({
+    actorUserId: user.userId,
+    actorUsername: user.username,
+    action: "settings_save",
+    entityType: "company_settings",
+    entityId: 1,
+    before: before ?? null,
+    after: {
+      name: d.name,
+      gstin: d.gstin,
+      state_code: d.state_code,
+      invoice_prefix: d.invoice_prefix,
+    },
+  });
 
   revalidatePath("/", "layout");
   return { ok: true, toast: "Settings saved" };

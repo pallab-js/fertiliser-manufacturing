@@ -1,4 +1,4 @@
-import { db, inTx, DomainError } from "@/db";
+import { db, inTx, DomainError, withUniqueRetry } from "@/db";
 import { applyMovement, dispatchableQty } from "@/lib/stock";
 import { amountInWords, computeInvoiceTotals, nextInvoiceNo } from "@/lib/gst";
 import { financialYear, nowIso } from "@/lib/dates";
@@ -67,16 +67,27 @@ export function createSalesOrder(input: {
       }
     }
 
-    const soNo = nextSoNo();
-    const id = Number(
-      db
-        .prepare(
-          `INSERT INTO sales_order (so_no, customer_id, place_of_supply_state_code,
-             tax_mode, notes, created_by) VALUES (?, ?, ?, ?, ?, ?)`,
-        )
-        .run(soNo, input.customerId, input.placeOfSupplyStateCode, taxMode, input.notes, input.userId)
-        .lastInsertRowid,
-    );
+    let soNo = "";
+    let id = 0;
+    withUniqueRetry(() => {
+      soNo = nextSoNo();
+      id = Number(
+        db
+          .prepare(
+            `INSERT INTO sales_order (so_no, customer_id, place_of_supply_state_code,
+               tax_mode, notes, created_by) VALUES (?, ?, ?, ?, ?, ?)`,
+          )
+          .run(
+            soNo,
+            input.customerId,
+            input.placeOfSupplyStateCode,
+            taxMode,
+            input.notes,
+            input.userId,
+          )
+          .lastInsertRowid,
+      );
+    });
     const line = db.prepare(
       `INSERT INTO sales_order_line (so_id, item_id, qty, rate_paise, gst_rate)
        VALUES (?, ?, ?, ?, (SELECT gst_rate FROM item WHERE id = ?))`,
@@ -175,37 +186,44 @@ export function issueInvoice(input: {
     );
 
     const fy = financialYear();
-    const { invoiceNo, seq } = nextInvoiceNo(fy); // inside tx — rollback never burns seq
+    let invoiceNo = "";
+    let seq = 0;
+    let invoiceId = 0;
     const invoiceDate = nowIso().slice(0, 10);
-    const invoiceId = Number(
-      db
-        .prepare(
-          `INSERT INTO invoice (invoice_no, fy, seq, so_id, customer_id, tax_mode,
-             place_of_supply_state_code, invoice_date, subtotal_paise, cgst_paise,
-             sgst_paise, igst_paise, roundoff_paise, total_paise, amount_in_words,
-             status, created_by)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'unpaid', ?)`,
-        )
-        .run(
-          invoiceNo,
-          fy,
-          seq,
-          so.id,
-          so.customer_id,
-          so.tax_mode,
-          so.place_of_supply_state_code,
-          invoiceDate,
-          totals.subtotalPaise,
-          totals.cgstPaise,
-          totals.sgstPaise,
-          totals.igstPaise,
-          totals.roundoffPaise,
-          totals.totalPaise,
-          amountInWords(totals.totalPaise),
-          input.userId,
-        )
-        .lastInsertRowid,
-    );
+    withUniqueRetry(() => {
+      const n = nextInvoiceNo(fy); // inside tx — rollback never burns seq
+      invoiceNo = n.invoiceNo;
+      seq = n.seq;
+      invoiceId = Number(
+        db
+          .prepare(
+            `INSERT INTO invoice (invoice_no, fy, seq, so_id, customer_id, tax_mode,
+               place_of_supply_state_code, invoice_date, subtotal_paise, cgst_paise,
+               sgst_paise, igst_paise, roundoff_paise, total_paise, amount_in_words,
+               status, created_by)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'unpaid', ?)`,
+          )
+          .run(
+            invoiceNo,
+            fy,
+            seq,
+            so.id,
+            so.customer_id,
+            so.tax_mode,
+            so.place_of_supply_state_code,
+            invoiceDate,
+            totals.subtotalPaise,
+            totals.cgstPaise,
+            totals.sgstPaise,
+            totals.igstPaise,
+            totals.roundoffPaise,
+            totals.totalPaise,
+            amountInWords(totals.totalPaise),
+            input.userId,
+          )
+          .lastInsertRowid,
+      );
+    });
 
     const snapLine = db.prepare(
       `INSERT INTO invoice_line (invoice_id, item_id, batch_id, description, hsn_code,

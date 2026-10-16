@@ -37,6 +37,12 @@ function readLines(formData: FormData) {
 }
 
 export const createSalesOrderAction = withRole("operator", async (user, formData) => {
+  const items = formData.getAll("line_item");
+  const qtys = formData.getAll("line_qty");
+  const rates = formData.getAll("line_rate");
+  if (!(items.length === qtys.length && qtys.length === rates.length && items.length > 0)) {
+    return { ok: false, fieldErrors: { lines: "Line rows are incomplete — check every row" } };
+  }
   const parsed = createSchema.safeParse({
     customer_id: formData.get("customer_id"),
     place_of_supply: formData.get("place_of_supply"),

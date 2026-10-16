@@ -1,546 +1,151 @@
 ---
-version: alpha
-name: Discord Analysis
-description: An analysis of Discord's design language — a loud, playful gaming-native system built on a deep-indigo canvas lit by Blurple, electric green, and vibrant magenta gradients. Heavy ABC Ginto Nord display type shouts in all-caps over generously rounded media, gradient feature panels, and full-bleed Blurple bands; the mood is arcade-energetic, never corporate.
-
-colors:
-  primary: "#5865f2"
-  on-primary: "#ffffff"
-  green: "#35ed7e"
-  magenta: "#ec48bd"
-  link: "#00b0f4"
-  canvas: "#0a0d3a"
-  surface-indigo: "#1e2353"
-  surface-onyx: "#23272a"
-  surface-black: "#000000"
-  ink: "#ffffff"
-  ink-dark: "#000000"
-  muted: "#333333"
-  hairline: "#23272a"
-
-typography:
-  display-xl:
-    fontFamily: ABC Ginto Nord
-    fontSize: 82px
-    fontWeight: 800
-    lineHeight: 1.0
-    letterSpacing: 0
-  display-lg:
-    fontFamily: ABC Ginto Nord
-    fontSize: 62px
-    fontWeight: 800
-    lineHeight: 1.05
-    letterSpacing: 0
-  display-md:
-    fontFamily: ABC Ginto Nord
-    fontSize: 56px
-    fontWeight: 700
-    lineHeight: 1.05
-    letterSpacing: 0
-  heading-lg:
-    fontFamily: ABC Ginto Nord
-    fontSize: 48px
-    fontWeight: 700
-    lineHeight: 1.1
-    letterSpacing: 0
-  heading-sm:
-    fontFamily: ABC Ginto Nord
-    fontSize: 22px
-    fontWeight: 700
-    lineHeight: 1.2
-    letterSpacing: 0
-  body-lg:
-    fontFamily: ABC Ginto
-    fontSize: 20px
-    fontWeight: 500
-    lineHeight: 1.4
-    letterSpacing: 0
-  link-lg:
-    fontFamily: ABC Ginto
-    fontSize: 18px
-    fontWeight: 500
-    lineHeight: 1.4
-    letterSpacing: 0
-  body:
-    fontFamily: ggsans
-    fontSize: 16px
-    fontWeight: 400
-    lineHeight: 1.5
-    letterSpacing: 0
-  link:
-    fontFamily: ABC Ginto
-    fontSize: 16px
-    fontWeight: 500
-    lineHeight: 1.4
-    letterSpacing: 0
-  link-sm:
-    fontFamily: ABC Ginto
-    fontSize: 14px
-    fontWeight: 500
-    lineHeight: 1.4
-    letterSpacing: 0
-
-rounded:
-  xs: 6px
-  sm: 12px
-  md: 14px
-  lg: 16px
-  xl: 40px
-  pill: 50px
-  jumbo: 120px
-  full: 9999px
-
-spacing:
-  xxs: 4px
-  xs: 8px
-  sm: 12px
-  md: 16px
-  lg: 20px
-  xl: 24px
-  xxl: 32px
-  section: 40px
-
-components:
-  nav-bar:
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.ink}"
-    typography: "{typography.link}"
-    padding: "{spacing.md} {spacing.xl}"
-  button-primary:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.on-primary}"
-    typography: "{typography.link-lg}"
-    rounded: "{rounded.sm}"
-    padding: "{spacing.lg} {spacing.xl}"
-  button-green:
-    backgroundColor: "{colors.green}"
-    textColor: "{colors.ink-dark}"
-    typography: "{typography.link-lg}"
-    rounded: "{rounded.sm}"
-    padding: "{spacing.sm} {spacing.xl}"
-  button-white:
-    backgroundColor: "{colors.ink}"
-    textColor: "{colors.ink-dark}"
-    typography: "{typography.link}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xs} {spacing.md}"
-  button-ghost:
-    backgroundColor: "{colors.surface-indigo}"
-    textColor: "{colors.ink}"
-    typography: "{typography.link}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.md}"
-  button-ghost-sm:
-    backgroundColor: "{colors.surface-indigo}"
-    textColor: "{colors.ink}"
-    typography: "{typography.link-sm}"
-    rounded: "{rounded.xs}"
-    padding: "{spacing.sm} {spacing.xxl}"
-  hero:
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.ink}"
-    typography: "{typography.display-xl}"
-    padding: "{spacing.section}"
-  feature-card-gradient:
-    backgroundColor: "{colors.magenta}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.xl}"
-    padding: "{spacing.section}"
-  feature-card-dark:
-    backgroundColor: "{colors.surface-indigo}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.xl}"
-    padding: "{spacing.xxl}"
-  showcase-band-black:
-    backgroundColor: "{colors.surface-black}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.xl}"
-    padding: "{spacing.section}"
-  stat-card:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.ink}"
-    typography: "{typography.display-md}"
-    rounded: "{rounded.xl}"
-    padding: "{spacing.xxl}"
-  step-card:
-    backgroundColor: "{colors.magenta}"
-    textColor: "{colors.ink}"
-    typography: "{typography.heading-sm}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xl}"
-  cta-band:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.ink}"
-    typography: "{typography.display-md}"
-    rounded: "{rounded.xl}"
-    padding: "{spacing.section}"
-  marquee-band:
-    backgroundColor: "{colors.primary}"
-    textColor: "{colors.ink}"
-    typography: "{typography.display-lg}"
-    padding: "{spacing.lg}"
-  pricing-table:
-    backgroundColor: "{colors.surface-indigo}"
-    textColor: "{colors.ink}"
-    typography: "{typography.body}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xl}"
-  game-rank-feature:
-    backgroundColor: "{colors.surface-indigo}"
-    textColor: "{colors.ink}"
-    typography: "{typography.heading-sm}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.md}"
-  game-rank-row:
-    backgroundColor: "{colors.surface-indigo}"
-    textColor: "{colors.ink}"
-    typography: "{typography.body}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.sm} {spacing.md}"
-  faq-accordion:
-    backgroundColor: "{colors.surface-indigo}"
-    textColor: "{colors.ink}"
-    typography: "{typography.link-lg}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xl}"
-  badge:
-    backgroundColor: "{colors.magenta}"
-    textColor: "{colors.ink}"
-    typography: "{typography.link-sm}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xxs} {spacing.sm}"
-  footer:
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.ink}"
-    typography: "{typography.link}"
-    padding: "{spacing.section}"
-
-  # ─── Examples (illustrative) — auto-derived; resolve any TO_FILL markers below ───
-  ex-pricing-tier:
-    description: "Default Pricing tier card. Re-uses feature-card chrome with brand canvas-soft surface."
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.ink}"
-    borderColor: "{colors.hairline}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xl}"
-  ex-pricing-tier-featured:
-    description: "Featured/highlighted tier — polarity-flipped surface (dark fill + light text in light mode, light fill + dark text in dark mode)."
-    backgroundColor: "{colors.ink}"
-    textColor: "{colors.on-primary}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xl}"
-  ex-product-selector:
-    description: "What's Included summary card — re-purposed for SaaS / B2B verticals (NOT a literal product gallery)."
-    backgroundColor: "{colors.canvas}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xl}"
-  ex-cart-drawer:
-    description: "Subscription summary — re-purposed for SaaS / B2B (line items per add-on, not literal cart)."
-    backgroundColor: "{colors.canvas}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xl}"
-    item-divider: "{colors.hairline}"
-  ex-app-shell-row:
-    description: "Sidebar nav row inside the App Shell example. Active state uses brand primary as the indicator."
-    backgroundColor: "{colors.canvas}"
-    activeIndicator: "{colors.primary}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.sm} {spacing.md}"
-  ex-data-table-cell:
-    description: "Default data-table th + td chrome. Header uses small link-caps typography; body uses body."
-    headerBackground: "{colors.surface-indigo}"
-    headerTypography: "{typography.link-sm}"
-    bodyTypography: "{typography.body}"
-    cellPadding: "{spacing.sm} {spacing.md}"
-    rowBorder: "{colors.hairline}"
-  ex-auth-form-card:
-    description: "Sign-in / sign-up card. Re-uses feature-card chrome with text-input primitives inside."
-    backgroundColor: "{colors.canvas}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xl}"
-  ex-modal-card:
-    description: "Modal dialog surface — same chrome as feature-card with elevated shadow."
-    backgroundColor: "{colors.canvas}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xl}"
-  ex-empty-state-card:
-    description: "Empty-state illustration frame."
-    backgroundColor: "{colors.canvas}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.section}"
-    captionTypography: "{typography.body}"
-  ex-toast:
-    description: "Toast notification surface — feature-card shape + medium shadow."
-    backgroundColor: "{colors.canvas}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.sm} {spacing.md}"
-    typography: "{typography.body}"
-
+version: 1.0
+name: Fertilizer MSME Manager — Design System
+description: Dark-only B2B design system for a fertilizer manufacturing MSME unit. Deep-indigo canvas, Blurple primary, a single high-intent green CTA, Hanken Grotsesk (display) + Inter (body), radius-xl panels, hairline dividers, no decorative shadows.
 ---
 
+# DESIGN.md — Fertilizer MSME Manager Design System
 
-## Overview
+**Source of truth** for the application chrome. `docs/ui-ux-guide.md` translates these tokens into Tailwind 4. If anything here contradicts `docs/ui-ux-guide.md`, this file wins. Never invent off-token styles, never add a fourth loud accent, never flatten the canvas.
 
-Discord's marketing design is loud on purpose. The pages live on a deep-indigo canvas (`{colors.canvas}` — #0a0d3a) that is rarely still: it is washed by an animated mesh of Blurple, violet, and vibrant magenta, then punctuated by full-bleed gradient bands and oversized rounded media. Where most product sites whisper in restrained neutrals, Discord shouts in heavy all-caps ABC Ginto Nord, stacks playful 3D character art, and lets a single electric green CTA (`{colors.green}`) pop against the cool indigo. The whole system reads like an arcade cabinet: energetic, saturated, unmistakably gaming-native.
+## 1. Theme stance
 
-The brand anchor is **Blurple** (`{colors.primary}` — #5865f2) — Discord's signature indigo-violet. It owns the primary CTA, the marquee and CTA bands, stat cards, and the brand mark. Around it orbit two supporting accents: the electric **green** (`{colors.green}`) used for the highest-intent "get started" actions, and a vibrant **magenta** (`{colors.magenta}` — #ec48bd) that fills the gradient feature panels and step cards. Surfaces stack in cool darks — the indigo canvas, a raised indigo panel (`{colors.surface-indigo}`), an onyx UI card (`{colors.surface-onyx}`), and pure black (`{colors.surface-black}`) showcase bands.
+**Dark-only v1.** The app lives on the deep-indigo canvas (`#0a0d3a`) end to end. No light mode in v1 (a light mode is a future extension via polarity-flip, not a v1 requirement).
 
-Geometry is soft and generous. Everyday controls round at `{rounded.sm}` (12px) and `{rounded.lg}` (16px); media tiles and feature panels bow out at `{rounded.xl}` (40px) and beyond; the most expressive shapes reach `{rounded.jumbo}` (120px) and pill caps. Nothing is sharp. The result is friendly, toy-like, and built to make software feel like play.
+## 2. Colors
 
-**Key Characteristics:**
-- Deep-indigo canvas (`{colors.canvas}`) lit by an animated Blurple-to-magenta gradient mesh — never a flat or neutral background.
-- One iconic brand colour: Blurple (`{colors.primary}`) owns CTAs, bands, and the brand mark; electric green (`{colors.green}`) is reserved for highest-intent actions.
-- Vibrant magenta (`{colors.magenta}`) gradient feature panels and step cards carry the playful, saturated energy.
-- Heavy all-caps display type in `{typography.display-xl}` (ABC Ginto Nord 800) shouting over generously rounded media.
-- Soft, toy-like geometry: 12–16px on controls, 40px+ on media, up to `{rounded.jumbo}` on signature shapes.
-- Page rhythm: dark-indigo hero → gradient + dark feature cards → black showcase band → Blurple marquee/CTA band → giant wordmark footer.
+| Token | Hex | Use |
+|-------|-----|-----|
+| `--color-primary` | `#5865f2` | Blurple — primary actions, active indicators, brand, main chart series |
+| `--color-on-primary` | `#ffffff` | Text on primary |
+| `--color-green` | `#35ed7e` | **One** highest-intent action per screen only (e.g. Save batch, Issue invoice). Never decorative. |
+| `--color-magenta` | `#ec48bd` | Accents, badges, gradient panels, error states, field errors |
+| `--color-link` | `#00b0f4` | Inline links on dark, focus ring |
+| `--color-canvas` | `#0a0d3a` | Page base |
+| `--color-surface-indigo` | `#1e2353` | Raised cards, table headers, ghost buttons, hover rows |
+| `--color-surface-onyx` | `#23272a` | Dividers, hairlines, QC-pass chip |
+| `--color-surface-black` | `#000000` | Showcase bands (not used in v1 app chrome) |
+| `--color-ink` | `#ffffff` | Dominant text |
+| `--color-ink-dark` | `#000000` | Text on light fills (green/white buttons) |
+| `--color-muted` | `#333333` | Secondary text on light surfaces only (avoid on canvas) |
+| `--color-hairline` | `#23272a` | 1px borders |
 
-## Colors
+## 3. Typography
 
-> Source pages analyzed: home, ads/quests, nitro, trending-games. Blurple, green, magenta, white display type, and the deep-indigo canvas recur on every page; nitro adds the pricing table, trending-games adds the ranked game list.
+Type families (open-source substitutes, via `next/font`):
+- Display: Hanken Grotesk (≈ ABC Ginto Nord) — headlines, 700–800, frequently uppercase, tracked tight.
+- Body/UI: Inter (≈ ggsans) — 16/400, line-height 1.5.
 
-### Brand & Accent
-- **Blurple** (`{colors.primary}` — #5865f2): The iconic brand colour. Primary CTA fill, marquee and CTA bands, stat cards, brand mark. The single most-used action colour.
-- **Electric Green** (`{colors.green}` — #35ed7e): Reserved for the highest-intent CTA ("get started" / "download"), always paired with `{colors.ink-dark}` text.
-- **Vibrant Magenta** (`{colors.magenta}` — #ec48bd): The saturated pink that fills gradient feature panels, step cards, and badges — the playful counterweight to the cool indigo.
-- **Link Cyan** (`{colors.link}` — #00b0f4): Inline text-link colour on dark surfaces.
+| Token | Size | Weight | Line height | Use |
+|-------|------|--------|-------------|-----|
+| display-xl | 82px | 800 | 1.0 | Login brand headline |
+| display-lg | 62px | 800 | 1.05 | — |
+| display-md | 56px | 700 | 1.05 | Empty-state big number |
+| heading-lg | 48px | 700 | 1.1 | Page hero heading |
+| heading-sm | 22px | 700 | 1.2 | Card / section titles |
+| body-lg | 20px | 500 | 1.4 | Lead paragraph |
+| link-lg | 18px | 500 | 1.4 | Big button labels |
+| body | 16px | 400 | 1.5 | Default body copy |
+| link-sm | 14px | 500 | 1.4 | Table headers, badges, fine print |
 
-### Surface
-- **Indigo Canvas** (`{colors.canvas}` — #0a0d3a): The deep-indigo page base, washed by the animated brand-gradient mesh.
-- **Raised Indigo** (`{colors.surface-indigo}` — #1e2353): One step up from canvas — dark feature cards, pricing table, game-rank rows, ghost buttons.
-- **Onyx** (`{colors.surface-onyx}` — #23272a): Discord's classic dark-UI surface; product-chrome cards and dividers.
-- **Black** (`{colors.surface-black}` — #000000): Full-black showcase bands framing product media.
+Dramatic weight jumps only (800 → 400) — no timid mid-weights on headings.
 
-### Text
-- **White** (`{colors.ink}` — #ffffff): All display and body text on the dark canvas. The dominant text colour.
-- **Ink** (`{colors.ink-dark}` — #000000): Text on light fills — the white button and green CTA.
-- **Muted Ink** (`{colors.muted}` — #333333): Secondary text on the occasional light surface (white product-mockup cards).
-
-### Brand Gradient
-The hero and feature panels ride an animated mesh that sweeps from `{colors.primary}` (Blurple) through a deep violet into the vibrant `{colors.magenta}`, resolving back into the `{colors.canvas}` indigo at the edges. It is the brand's defining atmospheric signature — always in motion, never a flat fill.
-
-## Typography
-
-### Font Family
-- **ABC Ginto Nord** — the heavy display face. All marketing headlines, set in 700–800 weight, frequently all-caps. Wide, confident, slightly condensed character that reads as "gaming."
-- **ABC Ginto** — the lighter companion for lead paragraphs, links, and buttons (weight 500).
-- **ggsans** — Discord's in-product UI sans, used for dense body copy (16px / 400).
-
-**Note on font substitutes:** ABC Ginto Nord and ggsans are proprietary. For an open-source rebuild, pair a heavy geometric grotesque — **Hanken Grotesk** or **Space Grotesk** at 700–800 — for display, with **Inter** or **Plus Jakarta Sans** for body and UI. Keep headlines bold and tracked tight; the loud, confident display weight is the brand's voice.
-
-### Hierarchy
-
-| Token | Size | Weight | Line Height | Letter Spacing | Use |
-|---|---|---|---|---|---|
-| `{typography.display-xl}` | 82px | 800 | 1.0 | 0 | Hero headline (all-caps) |
-| `{typography.display-lg}` | 62px | 800 | 1.05 | 0 | Marquee band, major headline |
-| `{typography.display-md}` | 56px | 700 | 1.05 | 0 | Section headline, CTA band |
-| `{typography.heading-lg}` | 48px | 700 | 1.1 | 0 | Sub-section heading |
-| `{typography.heading-sm}` | 22px | 700 | 1.2 | 0 | Card heading, step label |
-| `{typography.body-lg}` | 20px | 500 | 1.4 | 0 | Lead paragraph |
-| `{typography.link-lg}` | 18px | 500 | 1.4 | 0 | Large button label, prominent link |
-| `{typography.body}` | 16px | 400 | 1.5 | 0 | Default body copy (ggsans) |
-| `{typography.link}` | 16px | 500 | 1.4 | 0 | Nav link, button label |
-| `{typography.link-sm}` | 14px | 500 | 1.4 | 0 | Small link, badge, fine print |
-
-### Principles
-- Headlines are short, declarative, and frequently ALL-CAPS in ABC Ginto Nord 800 — the loudest element on every page.
-- Body copy drops to the lighter ABC Ginto / ggsans 400–500 so the display type stays the hero.
-- The display-to-body weight jump (800 → 400/500) is dramatic on purpose; there is no timid mid-weight in between.
-
-## Layout
-
-### Spacing System
-- **Base unit**: 8px.
-- **Tokens**: `{spacing.xxs}` 4px · `{spacing.xs}` 8px · `{spacing.sm}` 12px · `{spacing.md}` 16px · `{spacing.lg}` 20px · `{spacing.xl}` 24px · `{spacing.xxl}` 32px · `{spacing.section}` 40px.
-- Card interiors run `{spacing.xl}`–`{spacing.section}`; buttons pad `{spacing.sm}`–`{spacing.lg}` vertical by `{spacing.xl}` horizontal.
-
-### Grid & Container
-- Centered max-width content column (~1200px) on the full-bleed indigo canvas.
-- Feature sections alternate a two-column split (text + media) with stacked full-width gradient/dark cards.
-- Marquee, CTA, and showcase bands are full-bleed colour fields with their own rounded inner containers.
-
-### Whitespace Philosophy
-Sections breathe through large vertical gaps of indigo, then collide with saturated colour bands for rhythm. Inside cards, generous padding lets oversized 3D art and product mockups float with air.
-
-### Responsive Strategy
-
-#### Breakpoints
-| Name | Width | Key Changes |
-|---|---|---|
-| Mobile | < 768px | Single column; nav collapses to logo + hamburger; CTAs stack full-width |
-| Tablet | 768–1023px | Two-column splits begin stacking; gradient cards go full-width |
-| Laptop | 1024–1279px | Container narrows; multi-column grids retained |
-| Desktop | ≥ 1280px | Full multi-column grids; centered ~1200px column |
-
-(Discord ships an unusually dense breakpoint ladder — dozens of stops between 240px and ~2000px — to keep the oversized display type and 3D art balanced at every width.)
-
-#### Touch Targets
-`{components.button-primary}` and `{components.button-green}` clear ≥44px tap height via their vertical padding. Nav links and game-rank rows meet the same minimum on mobile.
-
-#### Collapsing Strategy
-The dark top nav (logo · links · Login · Download CTA) collapses to logo + hamburger below 768px. Two-column feature rows stack media-over-text; gradient and dark cards span full width. The nitro pricing table becomes horizontally scrollable; the trending-games ranked list keeps its row layout but drops secondary columns.
-
-#### Image Behavior
-Product mockups and 3D character art sit inside rounded media frames (`{rounded.lg}`–`{rounded.xl}`) or bleed past card edges as decorative props. Media scales fluidly within its container and keeps its corner radius at every width.
-
-## Elevation & Depth
-
-| Level | Treatment | Use |
-|---|---|---|
-| 0 — Flat | No shadow; separation by colour field + large radius | Most cards, colour bands |
-| 1 — Soft float | `0 3px 68px rgba(69,42,124,0.1)` — wide, violet-tinted, very diffuse | Floating media cards, elevated mockups |
-
-Discord leans on **colour, gradient, and radius** for depth far more than on shadow. The one extracted shadow is a wide, violet-tinted diffuse glow that lifts product media off the indigo canvas without a hard edge.
-
-### Decorative Depth
-- The animated Blurple-to-magenta gradient mesh creates depth by motion and hue rather than shadow.
-- 3D character art and product props overlap card edges to build foreground/background layering.
-- Full-bleed colour bands (Blurple, black) push depth by contrast against the indigo scroll.
-
-## Shapes
-
-### Border Radius Scale
+## 4. Radii (rounded scale)
 
 | Token | Value | Use |
-|---|---|---|
-| `{rounded.xs}` | 6px | Small ghost buttons, compact chips |
-| `{rounded.sm}` | 12px | Primary / green CTA buttons, links, table cells |
-| `{rounded.md}` | 14px | Game-rank rows, mid controls |
-| `{rounded.lg}` | 16px | White / ghost buttons, cards, media frames |
-| `{rounded.xl}` | 40px | Gradient feature panels, large media tiles |
-| `{rounded.pill}` | 50px | Pill caps, badges, avatar chips |
-| `{rounded.jumbo}` | 120px | Signature oversized rounded shape cards |
-| `{rounded.full}` | 9999px | Circular avatars and icon buttons |
+|-------|-------|-----|
+| xs | 6px | Small ghost buttons, compact chips |
+| sm | 12px | Primary / green CTA buttons, inputs |
+| md | 14px | Mid controls, nav rows |
+| lg | 16px | White/ghost buttons, cards, media frames |
+| xl | 40px | Panels, stat cards, empty states, modal |
+| pill | 50px | Badges, avatar chips |
+| full | 9999px | Circular avatars |
 
-### Photography Geometry
-Media is presented at soft-cornered rectangles (`{rounded.lg}`–`{rounded.xl}`), never hard-edged. The hero media block uses a directional bottom-only radius (88px bottom corners) for a swooping base. Avatars and circular icon controls are fully round.
+Nothing is square. No sharp corners on panels/media.
 
-## Components
+## 5. Spacing
 
-> No hover states documented. Component specs cover Default and Active/Pressed only; variants are separate `components:` entries.
+8px base grid. card padding 32px (xxl); section gaps 40px; button padding sm–lg vertical by xl horizontal.
+
+## 6. Depth & elevation
+
+No drop shadows as depth. Separation by colour field + large radius. One permitted lift (modals, toasts): `0 3px 68px rgba(69,42,124,0.1)` (violet-tinted diffuse). Depth comes from colour, radius, and the signature gradient mesh on login + dashboard header — never behind tables.
+
+## 7. Component recipes
 
 ### Buttons
+| Class | Spec |
+|-------|------|
+| `.btn-primary` | bg primary, text on-primary, 18/500, radius-sm, pad 20/24 |
+| `.btn-green` | bg green, text ink-dark, 18/500, radius-sm, pad 12/24 — **one per screen, highest-intent only** |
+| `.btn-white` | bg ink, text ink-dark, 16/500, radius-lg, pad 8/16 — modal confirmations |
+| `.btn-ghost` | bg surface-indigo, text ink, 16/500, radius-lg, pad 16 — secondary actions |
+| `.btn-ghost-sm` | bg surface-indigo, text ink, 14/500, radius-xs, pad 12/32 — table row actions |
 
-**`button-primary`** — the Blurple pill CTA
-- Background `{colors.primary}`, text `{colors.on-primary}`, type `{typography.link-lg}`, rounded `{rounded.sm}`, padding `{spacing.lg} {spacing.xl}`. The everyday action button across hero and feature sections.
+Touch targets ≥ 44px. Hover `filter: brightness(1.12)`, pressed `brightness(0.92)`. Focus-visible: 2px link-cyan ring.
 
-**`button-green`** — the electric-green high-intent CTA ("Get Started" / "Download")
-- Background `{colors.green}`, text `{colors.ink-dark}`, type `{typography.link-lg}`, rounded `{rounded.sm}`, padding `{spacing.sm} {spacing.xl}`. The highest-visibility action; black label for contrast.
+### Surfaces
+| Surface | Recipe |
+|---------|--------|
+| `.panel` | bg surface-indigo, text ink, radius-xl, pad 32 — default card |
+| `.panel-flat` | bg canvas, hairline border, radius-lg — table wrapper |
+| `.panel-gradient` | magenta→primary→violet gradient, radius-xl, pad 40 — dashboard hero band + login accent |
+| `.stat-card` | bg primary, text ink, number at display-md, radius-xl, pad 32 — standard KPI; magenta gradient variant for a single hero KPI |
+| `.badge` | bg magenta, text ink, 14/500, radius-lg, pad 4/12 — status chips |
 
-**`button-white`** — white solid button
-- Background `{colors.ink}`, text `{colors.ink-dark}`, type `{typography.link}`, rounded `{rounded.lg}`, padding `{spacing.xs} {spacing.md}`.
+### Forms
+- Input: bg surface-indigo, text ink, placeholder ink/45, radius-sm, pad 12/16, hairline border; focus = primary border + link ring.
+- Label: link-sm (14/500) above, ink/80.
+- Field error: magenta 14px below field; input border turns magenta.
 
-**`button-ghost`** — translucent indigo button on dark surfaces
-- Background `{colors.surface-indigo}`, text `{colors.ink}`, type `{typography.link}`, rounded `{rounded.lg}`, padding `{spacing.md}`.
+### Data table
+- Header: bg surface-indigo, text 14/500 uppercase, pad 12/16.
+- Body: bg canvas, text 16/400, pad 12/16, bottom border hairline; hover row surface-indigo/50.
+- Numeric columns right-aligned, tabular-nums.
 
-**`button-ghost-sm`** — compact ghost button (quests CTA row)
-- Background `{colors.surface-indigo}`, text `{colors.ink}`, type `{typography.link-sm}`, rounded `{rounded.xs}`, padding `{spacing.sm} {spacing.xxl}`.
+### Modal
+Canvas fill, radius-lg, pad 24, level-1 shadow, backdrop `rgba(10,13,58,0.7)` blur. Title heading-sm; actions right-aligned: ghost cancel + white confirm (green only when confirm is the screen's single highest-intent action). Focus-trapped; Esc closes; focus returns to trigger on close.
 
-### Cards & Containers
+### Toast
+Canvas, radius-lg, pad 12/16, body type, level-1 shadow, bottom-right. Success: link-cyan dot; error: magenta dot. Auto-dismiss 4s.
 
-**`hero`** — dark-indigo hero
-- Indigo `{colors.canvas}` field with the animated gradient mesh, white `{colors.ink}` all-caps headline at `{typography.display-xl}`, lead paragraph, and a CTA pair. The hero media block carries a swooping bottom-only radius.
+### Empty state
+Canvas frame, radius-xl, pad 40, centered: display-md icon/number in surface-indigo circle, body caption naming the first action, primary button to create the first record.
 
-**`feature-card-gradient`** — vibrant magenta gradient feature panel
-- Background `{colors.magenta}` gradient, white text, `{rounded.xl}` (40px), padding `{spacing.section}`. Frames a product mockup or 3D prop.
+### Skeleton (loading)
+surface-indigo block, radius-sm, slow pulse. Used while data loads; never spinners.
 
-**`feature-card-dark`** — raised dark feature card
-- Background `{colors.surface-indigo}`, white text, `{rounded.xl}`, padding `{spacing.xxl}`. Holds product screenshots / chat mockups.
+## 8. Charts (dashboard)
 
-**`showcase-band-black`** — full-black product showcase band
-- Background `{colors.surface-black}`, white text, `{rounded.xl}`, padding `{spacing.section}`. Frames a hero product demo.
+- Plot on canvas/surface-indigo cards.
+- Series colours, fixed order: primary → magenta → link → green → surface-onyx. Blurple owns the main series; magenta for comparison/target; link cyan for secondary; green only for achieved/on-target semantics.
+- Grid lines hairline; axis text ink/60 at 14px; tooltip surface-indigo radius-lg hairline border.
+- No 3D, no rainbow palettes. Chart data also available as visually-hidden table fallback.
 
-**`stat-card`** — big-number stat card (quests)
-- Background `{colors.primary}` (Blurple), white text, headline at `{typography.display-md}`, `{rounded.xl}`, padding `{spacing.xxl}`.
+## 9. Layout & rhythm
 
-**`step-card`** — numbered step panel (1/2/3 process)
-- Background `{colors.magenta}` gradient, white text, label at `{typography.heading-sm}`, `{rounded.lg}`, padding `{spacing.xl}`.
+- 8px base grid; max-width content column 1200px; pad 24.
+- Sidebar: canvas, right hairline border; brand block top (Hanken 800, uppercase); nav rows radius-md pad 12/16; active state = primary 3px left bar + surface-indigo fill. Admin groups hidden from operators (server enforces regardless).
+- Topbar: canvas, page title heading-sm, user chip + sign-out.
+- Responsive: sidebar → hamburger drawer < 1024px; touch targets ≥ 44px.
 
-**`cta-band`** — full-bleed Blurple CTA band
-- Background `{colors.primary}`, white headline at `{typography.display-md}`, `{rounded.xl}`, padding `{spacing.section}`, with a `button-white` or `button-green` CTA.
+## 10. States (every screen)
 
-**`marquee-band`** — scrolling all-caps marquee ("PLAY · CHAT · HANG OUT")
-- Background `{colors.primary}`, white display text at `{typography.display-lg}`, padding `{spacing.lg}`.
+1. **Loading**: skeleton blocks on surface-indigo (no spinners).
+2. **Empty**: empty-state recipe naming the first action.
+3. **Error**: magenta-bordered panel with retry (ghost button); never blank.
+4. **Success**: toast + optimistic list update via revalidate.
+5. **Permission denied**: empty-state with lock icon, "Ask the admin for access."
 
-**`faq-accordion`** — collapsible FAQ row (nitro)
-- Background `{colors.surface-indigo}`, white text, question at `{typography.link-lg}`, `{rounded.lg}`, padding `{spacing.xl}`.
+## 11. Accessibility
 
-### Inputs & Forms
+- Contrast: white on canvas/primary passes AA; ink-dark on green/white passes AA — never ink on green, never muted on canvas.
+- Focus-visible link-cyan ring on all interactive elements; full keyboard operability; modal focus trap; ≥44px touch targets; labelled inputs.
+- `html { color-scheme: dark; }`, `@media print` strips `.no-print`, body → white/black.
 
-> Discord's marketing pages surface no standalone text inputs; forms route to the app. The kit-mirror `ex-*` form surfaces below model inputs against the brand's `{rounded.lg}` surfaces and `{colors.surface-indigo}` fills.
+## 12. Do / Don't
 
-### Navigation
+**Do:** canvas everywhere; Blurple for actions/active states; one green CTA per screen; uppercase/bold display on empty states + login; radius-xl on panels; hairline dividers; gradient mesh on login + dashboard header.
 
-**`nav-bar`** — dark top navigation
-- Indigo `{colors.canvas}` bar, white `{colors.ink}` links at `{typography.link}`, padding `{spacing.md} {spacing.xl}`. Slots: Discord logo · text links · "Login" · a Blurple/green Download CTA. Collapses to logo + hamburger on mobile.
-
-**`footer`** — dark link footer
-- Indigo `{colors.canvas}`, white links at `{typography.link}`, padding `{spacing.section}`, organized into multi-column link groups above a giant "Discord" wordmark.
-
-### Signature Components
-
-**`pricing-table`** — nitro plan comparison table
-- Raised-indigo `{colors.surface-indigo}` surface, body text at `{typography.body}`, `{rounded.lg}`, padding `{spacing.xl}`. Two plan columns (Nitro Basic / Nitro) with the popular tier carrying a `{colors.magenta}` badge, each row ending in a `button-primary` "Subscribe".
-
-**`game-rank-feature`** — top-ranked game card (trending-games #1/#2/#3)
-- Raised-indigo `{colors.surface-indigo}` card, large media, rank number + title at `{typography.heading-sm}`, `{rounded.lg}`, padding `{spacing.md}`.
-
-**`game-rank-row`** — ranked game list row
-- Raised-indigo `{colors.surface-indigo}`, body text at `{typography.body}`, `{rounded.md}`, padding `{spacing.sm} {spacing.md}`. Rank · icon · title · metadata columns.
-
-**`badge`** — small rounded tag / category chip
-- Background `{colors.magenta}`, white text at `{typography.link-sm}`, `{rounded.lg}`, padding `{spacing.xxs} {spacing.sm}`.
-
-### Examples (illustrative)
-
-> Auto-derived kit-mirror demonstration surfaces (`scripts/derive-examples-block.mjs`). Each `ex-*` entry references brand-native primitives so downstream consumers (`/preview-design`, `/generate-kit`) re-skin the same 10 surfaces consistently. `TO_FILL` markers indicate missing primitives — resolve in the LLM judgment pass.
-
-**`ex-pricing-tier`** — Default Pricing tier card. Re-uses feature-card chrome with brand canvas-soft surface.
-- Properties: `backgroundColor`, `textColor`, `borderColor`, `rounded`, `padding`
-
-**`ex-pricing-tier-featured`** — Featured/highlighted tier — polarity-flipped surface (dark fill + light text in light mode, light fill + dark text in dark mode).
-- Properties: `backgroundColor`, `textColor`, `rounded`, `padding`
-
-**`ex-product-selector`** — What's Included summary card — re-purposed for SaaS / B2B verticals (NOT a literal product gallery).
-- Properties: `backgroundColor`, `rounded`, `padding`
-
-**`ex-cart-drawer`** — Subscription summary — re-purposed for SaaS / B2B (line items per add-on, not literal cart).
-- Properties: `backgroundColor`, `rounded`, `padding`, `item-divider`
-
-**`ex-app-shell-row`** — Sidebar nav row inside the App Shell example. Active state uses brand primary as the indicator.
-- Properties: `backgroundColor`, `activeIndicator`, `rounded`, `padding`
-
-**`ex-data-table-cell`** — Default data-table th + td chrome. Header uses mono-caps eyebrow typography; body uses body-sm.
-- Properties: `headerBackground`, `headerTypography`, `bodyTypography`, `cellPadding`, `rowBorder`
-
-**`ex-auth-form-card`** — Sign-in / sign-up card. Re-uses feature-card chrome with text-input primitives inside.
-- Properties: `backgroundColor`, `rounded`, `padding`
-
-**`ex-modal-card`** — Modal dialog surface — same chrome as feature-card with elevated shadow.
-- Properties: `backgroundColor`, `rounded`, `padding`
-
-**`ex-empty-state-card`** — Empty-state illustration frame.
-- Properties: `backgroundColor`, `rounded`, `padding`, `captionTypography`
-
-**`ex-toast`** — Toast notification surface — feature-card shape + medium shadow.
-- Properties: `backgroundColor`, `rounded`, `padding`, `typography`
-
-
-## Do's and Don'ts
-
-### Do
-- Lead with the deep-indigo canvas (`{colors.canvas}`) and let the animated Blurple-to-magenta gradient carry atmosphere.
-- Reserve `{colors.green}` for the single highest-intent CTA on a page; use `{colors.primary}` Blurple for everything else action-related.
-- Shout with `{typography.display-xl}` ABC Ginto Nord in all-caps for headlines; drop hard to `{typography.body}` for copy.
-- Round generously — `{rounded.sm}`–`{rounded.lg}` on controls, `{rounded.xl}`+ on media and feature panels.
-- Frame product mockups inside `{colors.magenta}` gradient panels or `{colors.surface-indigo}` dark cards.
-- Let 3D character art and props overlap card edges to build playful depth.
-
-### Don't
-- Don't flatten the canvas to a neutral grey or pure black — the indigo + gradient mesh is the brand.
-- Don't use `{colors.green}` as a general accent; it is the high-intent CTA only.
-- Don't set headlines in a timid mid-weight — display type is 700–800 ABC Ginto Nord or it loses the brand voice.
-- Don't square off media or cards; the soft `{rounded.xl}`+ geometry is core to the playful tone.
-- Don't lean on drop shadows for depth; depth comes from colour, gradient, and overlapping art.
-- Don't introduce a fourth loud accent — Blurple, green, and magenta are the full chord.
+**Don't:** grey/white surfaces; square corners; shadows-as-depth; green as decoration; magenta body text; headline mid-weights; rainbow charts; gradient behind tables; inventing colours or radii outside this file.

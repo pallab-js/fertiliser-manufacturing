@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { db } from "@/db";
 import { withRole, zodFieldErrors } from "@/lib/guard";
+import { audit } from "@/lib/audit";
 
 const itemSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(120),
@@ -26,7 +27,7 @@ function uniqueNameError(name: string, exceptId?: number): string | null {
   return row ? "An active item with this name already exists" : null;
 }
 
-export const createItem = withRole("admin", async (_user, formData) => {
+export const createItem = withRole("admin", async (user, formData) => {
   const parsed = itemSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return { ok: false, fieldErrors: zodFieldErrors(parsed.error) };
 
@@ -46,11 +47,20 @@ export const createItem = withRole("admin", async (_user, formData) => {
     Math.round(d.purchase_price * 100),
     d.reorder_level,
   );
+
+  await audit({
+    actorUserId: user.userId,
+    actorUsername: user.username,
+    action: "create",
+    entityType: "item",
+    after: { name: d.name, kind: d.kind, unit: d.unit, gst_rate: d.gst_rate },
+  });
+
   revalidatePath("/items");
   return { ok: true, toast: `Item ${d.name} created` };
 });
 
-export const updateItem = withRole("admin", async (_user, formData) => {
+export const updateItem = withRole("admin", async (user, formData) => {
   const id = Number(formData.get("id"));
   if (!Number.isInteger(id) || id < 1) return { ok: false, error: "Item not found" };
   const parsed = itemSchema.safeParse(Object.fromEntries(formData));
@@ -60,6 +70,13 @@ export const updateItem = withRole("admin", async (_user, formData) => {
   if (dup) return { ok: false, fieldErrors: { name: dup } };
 
   const d = parsed.data;
+  const before = db
+    .prepare(
+      "SELECT name, kind, unit, hsn_code, gst_rate, purchase_price_paise, reorder_level FROM item WHERE id = ?",
+    )
+    .get(id) as Record<string, unknown> | undefined;
+  if (!before) return { ok: false, error: "Item not found" };
+
   const info = db
     .prepare(
       `UPDATE item SET name = ?, kind = ?, unit = ?, hsn_code = ?, gst_rate = ?,
@@ -78,19 +95,54 @@ export const updateItem = withRole("admin", async (_user, formData) => {
       id,
     );
   if (info.changes === 0) return { ok: false, error: "Item not found" };
+
+  await audit({
+    actorUserId: user.userId,
+    actorUsername: user.username,
+    action: "update",
+    entityType: "item",
+    entityId: id,
+    before,
+    after: {
+      name: d.name,
+      kind: d.kind,
+      unit: d.unit,
+      hsn_code: d.hsn_code,
+      gst_rate: d.gst_rate,
+      purchase_price_paise: Math.round(d.purchase_price * 100),
+      reorder_level: d.reorder_level,
+    },
+  });
+
   revalidatePath("/items");
   return { ok: true, toast: `${d.name} saved` };
 });
 
 /** FR-011: archive instead of delete (keeps all ledger references intact). */
-export const setItemArchived = withRole("admin", async (_user, formData) => {
+export const setItemArchived = withRole("admin", async (user, formData) => {
   const id = Number(formData.get("id"));
   const archived = formData.get("archived") === "1" ? 1 : 0;
   if (!Number.isInteger(id) || id < 1) return { ok: false, error: "Item not found" };
 
+  const before = db
+    .prepare("SELECT archived FROM item WHERE id = ?")
+    .get(id) as { archived: number } | undefined;
+  if (!before) return { ok: false, error: "Item not found" };
+
   db.prepare(
     "UPDATE item SET archived = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ','now') WHERE id = ?",
   ).run(archived, id);
+
+  await audit({
+    actorUserId: user.userId,
+    actorUsername: user.username,
+    action: archived === 1 ? "archive" : "restore",
+    entityType: "item",
+    entityId: id,
+    before: { archived: before.archived },
+    after: { archived },
+  });
+
   revalidatePath("/items");
   revalidatePath(`/items/${id}`);
   return { ok: true, toast: archived ? "Item archived" : "Item restored" };

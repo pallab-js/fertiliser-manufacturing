@@ -44,3 +44,27 @@ export function inTx<T>(fn: () => T): T {
 }
 
 export class DomainError extends Error {}
+
+/** Run `fn` (which computes a unique number + inserts) and retry on a UNIQUE
+ *  constraint failure, recomputing the number each attempt. number generators
+ *  (nextSoNo/nextPoNo/nextBatchNo/nextInvoiceNo) are pure computes; the caller
+ *  wraps compute+insert here so a concurrent writer can't steal the number. */
+export function withUniqueRetry<T>(fn: () => T, maxRetries = 10): T {
+  let lastErr: unknown;
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return fn();
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      if (
+        msg.includes("SQLITE_CONSTRAINT_UNIQUE") ||
+        msg.includes("UNIQUE constraint failed")
+      ) {
+        lastErr = err;
+        continue;
+      }
+      throw err;
+    }
+  }
+  throw lastErr;
+}

@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { db } from "@/db";
 import { withRole, zodFieldErrors } from "@/lib/guard";
+import { audit } from "@/lib/audit";
 
 const partyKind = z.enum(["customer", "supplier"]);
 
@@ -36,7 +37,7 @@ function table(kind: "customer" | "supplier"): string {
 
 const COLUMNS = "name, gstin, state_code, address, phone, email";
 
-export const createParty = withRole("admin", async (_user, formData) => {
+export const createParty = withRole("admin", async (user, formData) => {
   const parsed = partySchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return { ok: false, fieldErrors: zodFieldErrors(parsed.error) };
   const d = parsed.data;
@@ -49,11 +50,20 @@ export const createParty = withRole("admin", async (_user, formData) => {
   db.prepare(
     `INSERT INTO ${table(d.party)} (${COLUMNS}) VALUES (?, ?, ?, ?, ?, ?)`,
   ).run(d.name, d.gstin, d.state_code, d.address, d.phone, d.email);
+
+  await audit({
+    actorUserId: user.userId,
+    actorUsername: user.username,
+    action: "create",
+    entityType: d.party,
+    after: { name: d.name, gstin: d.gstin, state_code: d.state_code },
+  });
+
   revalidatePath(`/${d.party === "customer" ? "customers" : "suppliers"}`);
   return { ok: true, toast: `${d.name} added` };
 });
 
-export const updateParty = withRole("admin", async (_user, formData) => {
+export const updateParty = withRole("admin", async (user, formData) => {
   const id = Number(formData.get("id"));
   if (!Number.isInteger(id) || id < 1) return { ok: false, error: "Not found" };
   const parsed = partySchema.safeParse(Object.fromEntries(formData));
@@ -67,6 +77,13 @@ export const updateParty = withRole("admin", async (_user, formData) => {
     .get(d.name, id);
   if (dup) return { ok: false, fieldErrors: { name: "This name already exists" } };
 
+  const before = db
+    .prepare(
+      `SELECT name, gstin, state_code, address, phone, email FROM ${table(d.party)} WHERE id = ?`,
+    )
+    .get(id) as Record<string, unknown> | undefined;
+  if (!before) return { ok: false, error: "Not found" };
+
   const info = db
     .prepare(
       `UPDATE ${table(d.party)} SET ${COLUMNS},
@@ -75,22 +92,56 @@ export const updateParty = withRole("admin", async (_user, formData) => {
     )
     .run(d.name, d.gstin, d.state_code, d.address, d.phone, d.email, id);
   if (info.changes === 0) return { ok: false, error: "Not found" };
+
+  await audit({
+    actorUserId: user.userId,
+    actorUsername: user.username,
+    action: "update",
+    entityType: d.party,
+    entityId: id,
+    before,
+    after: {
+      name: d.name,
+      gstin: d.gstin,
+      state_code: d.state_code,
+      address: d.address,
+      phone: d.phone,
+      email: d.email,
+    },
+  });
+
   revalidatePath(`/${d.party === "customer" ? "customers" : "suppliers"}`);
   return { ok: true, toast: `${d.name} saved` };
 });
 
 /** FR-011: archive instead of delete. */
-export const setPartyArchived = withRole("admin", async (_user, formData) => {
+export const setPartyArchived = withRole("admin", async (user, formData) => {
   const id = Number(formData.get("id"));
   const archived = formData.get("archived") === "1" ? 1 : 0;
   const parsed = partyKind.safeParse(formData.get("party"));
   if (!parsed.success || !Number.isInteger(id) || id < 1)
     return { ok: false, error: "Not found" };
 
+  const before = db
+    .prepare(`SELECT archived FROM ${table(parsed.data)} WHERE id = ?`)
+    .get(id) as { archived: number } | undefined;
+  if (!before) return { ok: false, error: "Not found" };
+
   db.prepare(
     `UPDATE ${table(parsed.data)} SET archived = ?,
        updated_at = strftime('%Y-%m-%dT%H:%M:%fZ','now') WHERE id = ?`,
   ).run(archived, id);
+
+  await audit({
+    actorUserId: user.userId,
+    actorUsername: user.username,
+    action: archived === 1 ? "archive" : "restore",
+    entityType: parsed.data,
+    entityId: id,
+    before: { archived: before.archived },
+    after: { archived },
+  });
+
   const base = parsed.data === "customer" ? "/customers" : "/suppliers";
   revalidatePath(base);
   revalidatePath(`${base}/${id}`);

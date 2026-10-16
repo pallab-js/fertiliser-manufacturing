@@ -6,6 +6,7 @@ import {
 } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
+import { z } from "zod";
 import { db } from "@/db";
 
 export const SESSION_COOKIE = "fm_session";
@@ -128,3 +129,13 @@ export type SessionUser = {
   role: "admin" | "operator";
   sessionId: string;
 };
+
+/** Password policy for password creation (create/reset): min 8 chars, at
+ *  least one letter and one digit. */
+export function passwordSchema(label = "Password") {
+  return z
+    .string()
+    .min(8, `${label} must be at least 8 characters`)
+    .regex(/[A-Za-z]/, `${label} must contain at least one letter`)
+    .regex(/\d/, `${label} must contain at least one digit`);
+}

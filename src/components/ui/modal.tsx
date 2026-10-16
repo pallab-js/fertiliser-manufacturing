@@ -1,8 +1,18 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
-/** Native <dialog> — focus trap, Esc-to-close, backdrop for free. */
+/** Native <dialog> with a focus trap: focus moves into the dialog on open,
+ *  Tab cycles within it, and focus returns to the triggering element on close. */
+const FOCUSABLE = [
+  "button",
+  "input",
+  "select",
+  "textarea",
+  "a[href]",
+  "[tabindex]:not([tabindex='-1'])",
+].join(", ");
+
 export function Modal({
   open,
   onClose,
@@ -15,13 +25,52 @@ export function Modal({
   children: React.ReactNode;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
+  const prevFocus = useRef<HTMLElement | null>(null);
+
+  const focusFirst = useCallback(() => {
+    const d = ref.current;
+    if (!d) return;
+    const focusables = d.querySelectorAll<HTMLElement>(FOCUSABLE);
+    const closeBtn = d.querySelector<HTMLElement>('button[aria-label="Close"]');
+    const target = focusables[0] ?? closeBtn ?? null;
+    if (target) target.focus({ preventScroll: true });
+  }, []);
+
+  const trap = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key !== "Tab") return;
+      const d = ref.current;
+      if (!d || !d.open) return;
+      const focusables = Array.from(d.querySelectorAll<HTMLElement>(FOCUSABLE));
+      if (focusables.length === 0) return;
+      e.preventDefault();
+      const index = focusables.indexOf(document.activeElement as HTMLElement);
+      const next =
+        index === -1
+          ? 0
+          : (index + (e.shiftKey ? -1 : 1) + focusables.length) %
+            focusables.length;
+      focusables[next].focus({ preventScroll: true });
+    },
+    [],
+  );
 
   useEffect(() => {
     const d = ref.current;
     if (!d) return;
-    if (open && !d.open) d.showModal();
-    if (!open && d.open) d.close();
-  }, [open]);
+    if (open) {
+      prevFocus.current = document.activeElement as HTMLElement | null;
+      d.showModal();
+      d.addEventListener("keydown", trap);
+      requestAnimationFrame(focusFirst);
+    } else {
+      d.removeEventListener("keydown", trap);
+      d.close();
+      prevFocus.current?.focus?.({ preventScroll: true });
+      prevFocus.current = null;
+    }
+    return () => d.removeEventListener("keydown", trap);
+  }, [open, trap, focusFirst]);
 
   return (
     <dialog

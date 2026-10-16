@@ -1,4 +1,4 @@
-import { db, inTx, DomainError } from "@/db";
+import { db, inTx, DomainError, withUniqueRetry } from "@/db";
 import { applyMovement } from "@/lib/stock";
 import { financialYear, nowIso } from "@/lib/dates";
 
@@ -44,14 +44,18 @@ export function createPurchaseOrder(input: {
       if (item.archived) throw new DomainError("Item is archived");
     }
 
-    const poNo = nextPoNo();
-    const id = Number(
-      db
-        .prepare(
-          "INSERT INTO purchase_order (po_no, supplier_id, notes, created_by) VALUES (?, ?, ?, ?)",
-        )
-        .run(poNo, input.supplierId, input.notes, input.userId).lastInsertRowid,
-    );
+    let poNo = "";
+    let id = 0;
+    withUniqueRetry(() => {
+      poNo = nextPoNo();
+      id = Number(
+        db
+          .prepare(
+            "INSERT INTO purchase_order (po_no, supplier_id, notes, created_by) VALUES (?, ?, ?, ?)",
+          )
+          .run(poNo, input.supplierId, input.notes, input.userId).lastInsertRowid,
+      );
+    });
     const line = db.prepare(
       "INSERT INTO purchase_line (po_id, item_id, qty, rate_paise) VALUES (?, ?, ?, ?)",
     );

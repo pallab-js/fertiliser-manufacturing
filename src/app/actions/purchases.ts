@@ -32,6 +32,12 @@ function readLines(formData: FormData) {
 }
 
 export const createPurchaseOrderAction = withRole("operator", async (user, formData) => {
+  const items = formData.getAll("line_item");
+  const qtys = formData.getAll("line_qty");
+  const rates = formData.getAll("line_rate");
+  if (!(items.length === qtys.length && qtys.length === rates.length && items.length > 0)) {
+    return { ok: false, fieldErrors: { lines: "Line rows are incomplete — check every row" } };
+  }
   const parsed = createSchema.safeParse({
     supplier_id: formData.get("supplier_id"),
     notes: formData.get("notes"),

@@ -27,6 +27,7 @@
     "start": "next start",
     "lint": "eslint .",
     "test": "tsx --test tests/*.test.ts",
+    "typecheck": "tsc --noEmit",
     "db:migrate": "tsx src/db/migrate.ts",
     "db:seed": "tsx src/db/seed.ts",
     "db:check": "tsx src/db/check.ts"
