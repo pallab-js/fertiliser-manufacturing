@@ -117,7 +117,13 @@ export function ArchivePartyButton({
 }) {
   const [state, dispatch, pending] = useActionState<ActionState, FormData>(setPartyArchived, null);
   return (
-    <form action={dispatch} className="inline">
+    <form
+      action={dispatch}
+      className="inline"
+      onSubmit={(e) => {
+        if (!window.confirm(archived ? "Restore this party?" : "Archive this party?")) e.preventDefault();
+      }}
+    >
       <input type="hidden" name="party" value={party} />
       <input type="hidden" name="id" value={id} />
       <input type="hidden" name="archived" value={archived ? "0" : "1"} />

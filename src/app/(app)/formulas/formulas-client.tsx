@@ -187,7 +187,13 @@ export function EditFormula({
 export function SetFormulaActiveButton({ id, active }: { id: number; active: boolean }) {
   const [state, dispatch, pending] = useActionState<ActionState, FormData>(setFormulaActive, null);
   return (
-    <form action={dispatch} className="inline">
+    <form
+      action={dispatch}
+      className="inline"
+      onSubmit={(e) => {
+        if (!window.confirm(active ? "Deactivate this formula?" : "Reactivate this formula?")) e.preventDefault();
+      }}
+    >
       <input type="hidden" name="id" value={id} />
       <input type="hidden" name="active" value={active ? "0" : "1"} />
       <Button type="submit" variant="ghost-sm" disabled={pending}>

@@ -62,7 +62,12 @@ export function RowActions({ id, active }: { id: number; active: boolean }) {
 
   return (
     <div className="flex items-center gap-2">
-      <form action={dispatch}>
+      <form
+        action={dispatch}
+        onSubmit={(e) => {
+          if (!window.confirm(active ? "Deactivate this user?" : "Reactivate this user?")) e.preventDefault();
+        }}
+      >
         <input type="hidden" name="id" value={id} />
         <input type="hidden" name="active" value={active ? 0 : 1} />
         <Button type="submit" variant="ghost-sm" disabled={pending}>

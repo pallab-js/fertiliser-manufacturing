@@ -139,7 +139,13 @@ export function EditItemForm({ id, initial }: { id: number; initial: ItemValues 
 export function ArchiveItemButton({ id, archived }: { id: number; archived: boolean }) {
   const [state, dispatch, pending] = useActionState<ActionState, FormData>(setItemArchived, null);
   return (
-    <form action={dispatch} className="inline">
+    <form
+      action={dispatch}
+      className="inline"
+      onSubmit={(e) => {
+        if (!window.confirm(archived ? "Restore this item?" : "Archive this item?")) e.preventDefault();
+      }}
+    >
       <input type="hidden" name="id" value={id} />
       <input type="hidden" name="archived" value={archived ? "0" : "1"} />
       <Button type="submit" variant="ghost-sm" disabled={pending}>

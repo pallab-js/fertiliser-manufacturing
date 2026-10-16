@@ -96,6 +96,12 @@ export function Shell({
 
   return (
     <div className="flex min-h-screen">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-on-primary focus:rounded"
+      >
+        Skip to main content
+      </a>
       {/* Desktop sidebar */}
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-hairline bg-canvas lg:flex">
         <SidebarContent />
@@ -139,7 +145,7 @@ export function Shell({
           ) : null}
         </header>
 
-        <main className="mx-auto w-full max-w-[1200px] flex-1 px-4 py-6 md:px-6">
+        <main id="main-content" className="mx-auto w-full max-w-[1200px] flex-1 px-4 py-6 md:px-6">
           {children}
         </main>
       </div>
