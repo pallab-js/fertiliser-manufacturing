@@ -1,5 +1,4 @@
 import { cookies, headers } from "next/headers";
-import { connection } from "next/server";
 import { redirect } from "next/navigation";
 import type { z } from "zod";
 import { DomainError } from "@/db";
@@ -17,9 +16,6 @@ export type ActionState = {
 } | null;
 
 export async function getSession(): Promise<SessionUser | null> {
-  // Marks the read as request-time so session expiry checks (Date.now) are
-  // legal during Cache Components' blocking route render.
-  await connection();
   const store = await cookies();
   return verifySessionCookie(store.get(SESSION_COOKIE)?.value);
 }
