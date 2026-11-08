@@ -5,15 +5,19 @@ export function Field({
   hint,
   error,
   children,
+  htmlFor,
 }: {
   label: string;
   hint?: string;
   error?: string;
   children: React.ReactNode;
+  htmlFor?: string;
 }) {
   return (
     <div>
-      <label className="field-label">{label}</label>
+      <label className="field-label" htmlFor={htmlFor}>
+        {label}
+      </label>
       {children}
       {hint && !error ? (
         <p className="mt-1 text-sm text-ink/50">{hint}</p>

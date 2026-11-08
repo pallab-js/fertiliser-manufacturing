@@ -123,9 +123,9 @@ export function Shell({
 
       <div className="flex min-w-0 flex-1 flex-col lg:pl-64">
         {/* Topbar (nav-bar) */}
-        <header className="sticky top-0 z-20 flex items-center gap-4 border-b border-hairline bg-canvas px-4 py-3 md:px-6">
+        <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-hairline bg-canvas px-4 py-3 md:px-6">
           <button
-            className="btn-ghost-sm lg:hidden"
+            className="btn-ghost-sm shrink-0 lg:hidden"
             onClick={() => setDrawer(true)}
             aria-label="Open navigation"
           >
@@ -135,12 +135,14 @@ export function Shell({
               <line x1="3" y1="18" x2="21" y2="18" />
             </svg>
           </button>
-          <div className="flex-1" />
+          <div className="min-w-0 flex-1" />
           {user ? (
-            <div className="flex items-center gap-3">
-              <span className="badge badge-neutral">{user.role}</span>
-              <span className="text-sm text-ink/80">{user.username}</span>
-              <form action={logout} className="no-print">
+            <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+              <span className="badge badge-neutral shrink-0">{user.role}</span>
+              <span className="hidden max-w-[8rem] truncate text-sm text-ink/80 sm:inline">
+                {user.username}
+              </span>
+              <form action={logout} className="no-print shrink-0">
                 <button type="submit" className="btn-ghost-sm">
                   Sign out
                 </button>

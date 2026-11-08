@@ -178,7 +178,7 @@
     color: var(--color-ink);
     font-size: 14px;
     border-radius: var(--radius-xs);
-    padding: 12px 32px;
+    padding: 12px 16px;
   }
 
   /* --- Cards / surfaces --- */
@@ -304,7 +304,9 @@
   .table-wrap {
     border: 1px solid var(--color-hairline);
     border-radius: var(--radius-lg);
-    overflow: hidden;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
   }
 
   /* --- Toast (ex-toast) --- */

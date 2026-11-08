@@ -11,8 +11,13 @@ export function LoginForm() {
 
   return (
     <form action={dispatch} className="space-y-5">
-      <Field label="Username" error={state?.fieldErrors?.username}>
+      <Field
+        label="Username"
+        htmlFor="username"
+        error={state?.fieldErrors?.username}
+      >
         <Input
+          id="username"
           name="username"
           autoComplete="username"
           autoFocus
@@ -20,8 +25,13 @@ export function LoginForm() {
           error={state?.fieldErrors?.username}
         />
       </Field>
-      <Field label="Password" error={state?.fieldErrors?.password}>
+      <Field
+        label="Password"
+        htmlFor="password"
+        error={state?.fieldErrors?.password}
+      >
         <Input
+          id="password"
           name="password"
           type="password"
           autoComplete="current-password"
