@@ -43,5 +43,8 @@ next-env.d.ts
 # local data (sqlite db, backups, session secrets)
 /data
 
+# graphify knowledge graph output (generated artifacts, not source)
+/graphify-out/
+
 # agent credentials (per spec-kit install note)
 /.opencode
