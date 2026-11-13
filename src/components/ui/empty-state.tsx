@@ -9,7 +9,7 @@ export function EmptyState({
 }) {
   return (
     <div className="empty-state">
-      <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-surface-indigo font-display text-display-md font-extrabold text-primary">
+      <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-surface-indigo font-display text-display-md font-extrabold text-primary-soft">
         00
       </div>
       <h3 className="mb-2 text-heading-sm uppercase">{title}</h3>

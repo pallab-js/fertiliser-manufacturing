@@ -159,7 +159,12 @@ export default async function BatchDetailPage({
             plannedQty={batch.planned_qty}
           />
         ) : (
-          <div className="panel-flat overflow-x-auto bg-surface-indigo p-6 text-sm">
+          <div
+            className="panel-flat overflow-x-auto bg-surface-indigo p-6 text-sm"
+            role="region"
+            aria-label="Consumption"
+            tabIndex={0}
+          >
             <table className="w-full">
               <thead>
                 <tr className="border-b border-hairline text-left text-ink/50">

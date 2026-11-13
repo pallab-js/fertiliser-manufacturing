@@ -107,16 +107,19 @@ export function NewSoButton({
 
           <Field
             label="Place of supply"
+            htmlFor="place_of_supply"
             hint={intra ? "Intra-state · CGST + SGST" : "Inter-state · IGST"}
           >
             <Input
               type="text"
+              aria-label="Filter states"
               placeholder="Filter states…"
               value={posFilter}
               onChange={(e) => setPosFilter(e.target.value)}
               className="max-w-xs mb-2"
             />
             <Select
+              id="place_of_supply"
               name="place_of_supply"
               value={pos}
               onChange={(e) => setPos(e.target.value)}

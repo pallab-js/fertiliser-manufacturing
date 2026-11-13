@@ -17,13 +17,18 @@ export function DataTable<T>({
 }) {
   if (rows.length === 0 && empty) return <>{empty}</>;
   return (
-    <div className="table-wrap overflow-x-auto">
+    <div
+      className="table-wrap"
+      role="region"
+      aria-label="Table"
+      tabIndex={0}
+    >
       <table className="data-table">
         <thead>
           <tr>
-            {columns.map((c) => (
-              <th key={c.header} className={c.num ? "num" : undefined}>
-                {c.header}
+            {columns.map((c, i) => (
+              <th key={`${c.header}-${i}`} scope="col" className={c.num ? "num" : undefined}>
+                {c.header || <span className="sr-only">Actions</span>}
               </th>
             ))}
           </tr>
@@ -31,8 +36,8 @@ export function DataTable<T>({
         <tbody>
           {rows.map((row) => (
             <tr key={rowKey(row)}>
-              {columns.map((c) => (
-                <td key={c.header} className={c.num ? "num" : undefined}>
+              {columns.map((c, i) => (
+                <td key={`${c.header}-${i}`} className={c.num ? "num" : undefined}>
                   {c.cell(row)}
                 </td>
               ))}

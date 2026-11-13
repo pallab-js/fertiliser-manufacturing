@@ -161,57 +161,71 @@ export default async function InvoicePage({
           </p>
         </div>
 
-        <table className="mb-6 w-full text-sm">
-          <thead>
-            <tr className="border-b border-hairline text-left text-ink/50">
-              <th className="pb-2 font-medium">Description</th>
-              <th className="pb-2 font-medium">HSN</th>
-              <th className="pb-2 font-medium">Batch</th>
-              <th className="pb-2 text-right font-medium">Qty</th>
-              <th className="pb-2 text-right font-medium">Rate</th>
-              <th className="pb-2 text-right font-medium">GST</th>
-              <th className="pb-2 text-right font-medium">Taxable</th>
-              <th className="pb-2 text-right font-medium">Tax</th>
-            </tr>
-          </thead>
-          <tbody>
-            {lines.map((l, i) => (
-              <tr key={i} className="border-b border-hairline last:border-0">
-                <td className="py-2">{l.description}</td>
-                <td className="py-2 text-ink/60">{l.hsn_code || "—"}</td>
-                <td className="py-2 text-ink/60">{l.batch_no ?? "—"}</td>
-                <td className="py-2 text-right tabular-nums">{formatQty(l.qty, l.unit)}</td>
-                <td className="py-2 text-right tabular-nums">{formatRupees(l.rate_paise)}</td>
-                <td className="py-2 text-right tabular-nums">{l.gst_rate}%</td>
-                <td className="py-2 text-right tabular-nums">{formatRupees(l.taxable_paise)}</td>
-                <td className="py-2 text-right tabular-nums">{formatRupees(l.tax_paise)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        <div className="mb-6">
-          <p className="mb-2 text-xs uppercase tracking-widest text-ink/50">HSN summary</p>
-          <table className="w-full text-sm">
+        <div
+          className="-mx-1 mb-6 overflow-x-auto px-1 print:overflow-visible"
+          role="region"
+          aria-label="Invoice line items"
+          tabIndex={0}
+        >
+          <table className="w-full min-w-[560px] text-sm print:min-w-0">
             <thead>
               <tr className="border-b border-hairline text-left text-ink/50">
-                <th className="pb-2 font-medium">HSN</th>
-                <th className="pb-2 text-right font-medium">Rate</th>
-                <th className="pb-2 text-right font-medium">Taxable value</th>
-                <th className="pb-2 text-right font-medium">Tax</th>
+                <th scope="col" className="pb-2 font-medium">Description</th>
+                <th scope="col" className="pb-2 font-medium">HSN</th>
+                <th scope="col" className="pb-2 font-medium">Batch</th>
+                <th scope="col" className="pb-2 text-right font-medium">Qty</th>
+                <th scope="col" className="pb-2 text-right font-medium">Rate</th>
+                <th scope="col" className="pb-2 text-right font-medium">GST</th>
+                <th scope="col" className="pb-2 text-right font-medium">Taxable</th>
+                <th scope="col" className="pb-2 text-right font-medium">Tax</th>
               </tr>
             </thead>
             <tbody>
-              {[...hsn.values()].map((g) => (
-                <tr key={`${g.hsn_code}|${g.gst_rate}`} className="border-b border-hairline last:border-0">
-                  <td className="py-1.5">{g.hsn_code || "—"}</td>
-                  <td className="py-1.5 text-right tabular-nums">{g.gst_rate}%</td>
-                  <td className="py-1.5 text-right tabular-nums">{formatRupees(g.taxable_paise)}</td>
-                  <td className="py-1.5 text-right tabular-nums">{formatRupees(g.tax_paise)}</td>
+              {lines.map((l, i) => (
+                <tr key={i} className="border-b border-hairline last:border-0">
+                  <td className="py-2">{l.description}</td>
+                  <td className="py-2 text-ink/60">{l.hsn_code || "—"}</td>
+                  <td className="py-2 text-ink/60">{l.batch_no ?? "—"}</td>
+                  <td className="py-2 text-right tabular-nums">{formatQty(l.qty, l.unit)}</td>
+                  <td className="py-2 text-right tabular-nums">{formatRupees(l.rate_paise)}</td>
+                  <td className="py-2 text-right tabular-nums">{l.gst_rate}%</td>
+                  <td className="py-2 text-right tabular-nums">{formatRupees(l.taxable_paise)}</td>
+                  <td className="py-2 text-right tabular-nums">{formatRupees(l.tax_paise)}</td>
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
+
+        <div className="mb-6">
+          <p className="mb-2 text-xs uppercase tracking-widest text-ink/50">HSN summary</p>
+          <div
+            className="overflow-x-auto print:overflow-visible"
+            role="region"
+            aria-label="HSN summary"
+            tabIndex={0}
+          >
+            <table className="w-full min-w-[420px] text-sm print:min-w-0">
+              <thead>
+                <tr className="border-b border-hairline text-left text-ink/50">
+                  <th scope="col" className="pb-2 font-medium">HSN</th>
+                  <th scope="col" className="pb-2 text-right font-medium">Rate</th>
+                  <th scope="col" className="pb-2 text-right font-medium">Taxable value</th>
+                  <th scope="col" className="pb-2 text-right font-medium">Tax</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[...hsn.values()].map((g) => (
+                  <tr key={`${g.hsn_code}|${g.gst_rate}`} className="border-b border-hairline last:border-0">
+                    <td className="py-1.5">{g.hsn_code || "—"}</td>
+                    <td className="py-1.5 text-right tabular-nums">{g.gst_rate}%</td>
+                    <td className="py-1.5 text-right tabular-nums">{formatRupees(g.taxable_paise)}</td>
+                    <td className="py-1.5 text-right tabular-nums">{formatRupees(g.tax_paise)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <div className="ml-auto max-w-sm space-y-1.5 text-sm">
@@ -245,7 +259,12 @@ export default async function InvoicePage({
         {payments.length === 0 ? (
           <EmptyState title="No payments yet" hint="Record the first payment against this invoice." />
         ) : (
-          <div className="panel-flat overflow-x-auto bg-surface-indigo p-6 text-sm">
+          <div
+            className="panel-flat overflow-x-auto bg-surface-indigo p-6 text-sm"
+            role="region"
+            aria-label="Payments"
+            tabIndex={0}
+          >
             <table className="w-full">
               <thead>
                 <tr className="border-b border-hairline text-left text-ink/50">

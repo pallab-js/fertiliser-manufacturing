@@ -39,7 +39,7 @@ export function PeriodLinks({ current, basePath }: { current: number; basePath: 
           key={n}
           href={`${basePath}?months=${n}`}
           className={`px-4 py-1.5 text-sm font-medium ${
-            n === current ? "bg-white text-primary" : "text-white/80 hover:bg-white/10"
+            n === current ? "bg-white text-primary-strong" : "text-white hover:bg-white/10"
           }`}
         >
           {n}M

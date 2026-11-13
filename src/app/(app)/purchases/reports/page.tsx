@@ -30,7 +30,7 @@ export default async function PurchaseReportsPage({
       <div className="mesh-gradient flex flex-wrap items-center justify-between gap-4 rounded-2xl p-6">
         <div>
           <h1 className="text-display-sm font-extrabold uppercase">Purchase reports</h1>
-          <p className="mt-1 text-sm text-white/80">
+          <p className="mt-1 text-sm text-white">
             Spend from receipts · last {monthCount} months ·{" "}
             <Link href="/purchases" className="text-link">
               ← all purchases
@@ -42,13 +42,13 @@ export default async function PurchaseReportsPage({
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="stat-card">
-          <p className="text-sm text-white/80">Total spend · {monthCount}M</p>
+          <p className="text-sm text-white">Total spend · {monthCount}M</p>
           <p className="mt-1 font-display text-display-sm font-extrabold tabular-nums">
             {formatRupees(total)}
           </p>
         </div>
         <div className="stat-card">
-          <p className="text-sm text-white/80">Suppliers paid</p>
+          <p className="text-sm text-white">Suppliers paid</p>
           <p className="mt-1 font-display text-display-sm font-extrabold tabular-nums">
             {bySupplier.length}
           </p>

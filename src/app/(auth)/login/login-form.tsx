@@ -1,7 +1,6 @@
 "use client";
 
 import { useActionState } from "react";
-import Link from "next/link";
 import { login } from "@/app/actions/auth";
 import { Field, Input } from "@/components/ui/input";
 import { Toast } from "@/components/ui/toast";
@@ -51,10 +50,7 @@ export function LoginForm() {
       </button>
 
       <p className="text-center text-sm text-ink/50">
-        Fertilizer factory management ·{" "}
-        <Link href="/dashboard" className="text-link">
-          dashboard
-        </Link>
+        Fertilizer factory management
       </p>
       <Toast message={state?.ok ? state.toast : state?.error} error={!state?.ok} />
     </form>

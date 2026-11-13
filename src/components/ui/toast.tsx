@@ -40,7 +40,9 @@ export function Toast({ message, error = false }: { message?: string; error?: bo
 
   return (
     <div
-      className="toast fixed right-6 bottom-6 z-50 flex items-center gap-3" role="status"
+      className="toast fixed right-6 bottom-6 z-50 flex items-center gap-3"
+      role={error ? "alert" : "status"}
+      aria-live={error ? "assertive" : "polite"}
       onMouseEnter={() => {
         setPaused(true);
         clearTimer();

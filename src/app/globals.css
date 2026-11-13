@@ -7,9 +7,12 @@
 @theme {
   /* Colors */
   --color-primary: #5865f2; /* Blurple — actions, active indicators, brand */
+  --color-primary-soft: #8b93ff; /* primary text on canvas (6.8:1) */
+  --color-primary-strong: #4149c4; /* primary text on light surfaces */
   --color-on-primary: #ffffff;
   --color-green: #35ed7e; /* ONE highest-intent action per screen */
-  --color-magenta: #ec48bd; /* accents, badges, gradient panels */
+  --color-magenta: #ec48bd; /* accents, gradient panels, error text */
+  --color-magenta-deep: #b02a93; /* badge fill with white text (5.8:1) */
   --color-link: #00b0f4; /* inline links on dark */
   --color-canvas: #0a0d3a; /* page base */
   --color-surface-indigo: #1e2353; /* raised cards, table headers, ghost buttons */
@@ -41,6 +44,8 @@
   --text-display-lg--line-height: 1.05;
   --text-display-md: 56px;
   --text-display-md--line-height: 1.05;
+  --text-display-sm: 40px;
+  --text-display-sm--line-height: 1.05;
   --text-heading-lg: 48px;
   --text-heading-lg--line-height: 1.1;
   --text-heading-sm: 22px;
@@ -196,7 +201,7 @@
   .panel-gradient {
     background: linear-gradient(
       120deg,
-      var(--color-magenta) 0%,
+      var(--color-magenta-deep) 0%,
       var(--color-primary) 55%,
       #5b2fb8 100%
     );
@@ -212,13 +217,13 @@
     font-variant-numeric: tabular-nums;
   }
   .stat-card--hero {
-    background: linear-gradient(135deg, var(--color-magenta), var(--color-primary));
+    background: linear-gradient(135deg, var(--color-magenta-deep), var(--color-primary));
   }
 
   .badge {
     display: inline-flex;
     align-items: center;
-    background: var(--color-magenta);
+    background: var(--color-magenta-deep);
     color: var(--color-ink);
     font-size: 14px;
     font-weight: 500;
@@ -301,7 +306,13 @@
   .data-table .num {
     text-align: right;
   }
+  /* Keep standalone links in rows at a comfortable 24px tap target. */
+  .data-table tbody td a {
+    display: inline-block;
+    padding-block: 2px;
+  }
   .table-wrap {
+    position: relative; /* keeps wide tables from widening the page */
     border: 1px solid var(--color-hairline);
     border-radius: var(--radius-lg);
     overflow-x: auto;

@@ -147,7 +147,12 @@ export function CompleteBatchForm({
   return (
     <form action={dispatch} className="space-y-4">
       <input type="hidden" name="batch_id" value={batchId} />
-      <div className="panel-flat overflow-x-auto bg-surface-indigo p-6">
+      <div
+        className="panel-flat overflow-x-auto bg-surface-indigo p-6"
+        role="region"
+        aria-label="Actual consumption"
+        tabIndex={0}
+      >
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-hairline text-left text-ink/50">
@@ -248,6 +253,7 @@ export function AddQcForm({ batchId }: { batchId: number }) {
       </div>
       <Field
         label="Parameters (JSON)"
+        htmlFor="parameters"
         hint='e.g. {"moisture": 2.1, "granule_strength": 3.4, "npk_assay": 19.1}'
         error={err.parameters}
       >
@@ -274,7 +280,7 @@ export function AddQcForm({ batchId }: { batchId: number }) {
             Urea example
           </button>
         </div>
-        <Input name="parameters" defaultValue="{}" className="input font-mono" error={err.parameters} />
+        <Input id="parameters" name="parameters" defaultValue="{}" className="input font-mono" error={err.parameters} />
       </Field>
       {state?.error ? <p className="field-error">{state.error}</p> : null}
       <div className="flex justify-end">

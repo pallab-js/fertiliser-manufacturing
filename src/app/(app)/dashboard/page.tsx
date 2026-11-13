@@ -28,7 +28,7 @@ function ChartCard({
     <section className="panel-flat bg-surface-indigo p-6">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-heading-sm uppercase">{title}</h2>
-        <Link href={href} className="text-link text-sm">
+        <Link href={href} className="text-link inline-flex min-h-6 items-center text-sm">
           {linkLabel} →
         </Link>
       </div>
@@ -61,7 +61,7 @@ export default async function DashboardPage({
       <div className="mesh-gradient flex flex-wrap items-center justify-between gap-4 rounded-2xl p-6">
         <div>
           <h1 className="text-display-sm font-extrabold uppercase">Dashboard</h1>
-          <p className="mt-1 text-sm text-white/80">
+          <p className="mt-1 text-sm text-white">
             Factory health at a glance · {periodLabel}
           </p>
         </div>
@@ -71,35 +71,35 @@ export default async function DashboardPage({
       {/* KPI row — FR-006, every card links (FR-008) */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <Link href="/sales" className="stat-card stat-card--hero block">
-          <p className="text-sm text-white/80">Sales · {periodLabel}</p>
+          <p className="text-sm text-white">Sales · {periodLabel}</p>
           <p className="mt-2 font-display text-display-sm font-extrabold">
             {formatRupees(salesTotal)}
           </p>
-          <p className="mt-1 text-sm text-white/80">{d.salesTrend.filter((r) => r.value > 0).length} months invoiced</p>
+          <p className="mt-1 text-sm text-white">{d.salesTrend.filter((r) => r.value > 0).length} months invoiced</p>
         </Link>
 
         <Link href="/production" className="stat-card block">
-          <p className="text-sm text-white/80">Production · this month</p>
+          <p className="text-sm text-white">Production · this month</p>
           <p className="mt-2 font-display text-display-sm font-extrabold">
-            {d.production.actual} <span className="text-xl text-white/70">/ {d.production.target} MT</span>
+            {d.production.actual} <span className="text-xl text-white">/ {d.production.target} MT</span>
           </p>
-          <p className="mt-1 text-sm text-white/80">{prodPct}% of target</p>
+          <p className="mt-1 text-sm text-white">{prodPct}% of target</p>
         </Link>
 
         <Link href="/sales/receivables" className="stat-card block">
-          <p className="text-sm text-white/80">Receivables</p>
+          <p className="text-sm text-white">Receivables</p>
           <p className="mt-2 font-display text-display-sm font-extrabold">
             {formatRupees(d.receivables)}
           </p>
-          <p className="mt-1 text-sm text-white/80">unpaid + partial invoices</p>
+          <p className="mt-1 text-sm text-white">unpaid + partial invoices</p>
         </Link>
 
         <Link href="/production" className="stat-card block">
-          <p className="text-sm text-white/80">QC pass rate · {periodLabel}</p>
+          <p className="text-sm text-white">QC pass rate · {periodLabel}</p>
           <p className="mt-2 font-display text-display-sm font-extrabold">
             {Math.round(d.qc.rate * 100)}%
           </p>
-          <p className="mt-1 text-sm text-white/80">
+          <p className="mt-1 text-sm text-white">
             {d.qc.pass} pass · {d.qc.fail} fail
           </p>
         </Link>
@@ -125,7 +125,7 @@ export default async function DashboardPage({
       <section className="panel-flat bg-surface-indigo p-6">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-heading-sm uppercase">Low stock</h2>
-          <Link href="/inventory" className="text-link text-sm">
+          <Link href="/inventory" className="text-link inline-flex min-h-6 items-center text-sm">
             Inventory →
           </Link>
         </div>

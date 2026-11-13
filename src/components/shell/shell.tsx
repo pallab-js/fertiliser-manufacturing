@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { logout } from "@/app/actions/auth";
 
 type NavItem = { href: string; label: string; icon: string };
@@ -71,14 +71,30 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
   );
 }
 
-function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
+function SidebarContent({
+  onNavigate,
+  onClose,
+}: {
+  onNavigate?: () => void;
+  onClose?: () => void;
+}) {
   return (
     <>
-      <div className="border-b border-hairline px-6 py-5">
-        <Link href="/dashboard" className="font-display text-lg font-extrabold uppercase">
-          Fertilizer<span className="text-primary">MSME</span>
-        </Link>
-        <p className="mt-1 text-sm text-ink/50">Factory Manager</p>
+      <div className="flex items-start justify-between border-b border-hairline px-6 py-5">
+        <div>
+          <Link
+            href="/dashboard"
+            className="inline-block py-0.5 font-display text-lg font-extrabold uppercase"
+          >
+            Fertilizer<span className="text-primary-soft">MSME</span>
+          </Link>
+          <p className="mt-1 text-sm text-ink/50">Factory Manager</p>
+        </div>
+        {onClose ? (
+          <button className="btn-ghost-sm" onClick={onClose} aria-label="Close navigation">
+            ✕
+          </button>
+        ) : null}
       </div>
       <NavLinks onNavigate={onNavigate} />
     </>
@@ -93,6 +109,28 @@ export function Shell({
   children: React.ReactNode;
 }) {
   const [drawer, setDrawer] = useState(false);
+
+  // Close the mobile drawer on Escape, when the desktop breakpoint becomes
+  // active, and lock background scroll while it is open.
+  useEffect(() => {
+    if (!drawer) return;
+    const desktop = window.matchMedia("(min-width: 1024px)");
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setDrawer(false);
+    };
+    const onBreakpoint = () => {
+      if (desktop.matches) setDrawer(false);
+    };
+    document.addEventListener("keydown", onKey);
+    desktop.addEventListener("change", onBreakpoint);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      desktop.removeEventListener("change", onBreakpoint);
+      document.body.style.overflow = prev;
+    };
+  }, [drawer]);
 
   return (
     <div className="flex min-h-screen">
@@ -115,8 +153,13 @@ export function Shell({
             onClick={() => setDrawer(false)}
             aria-hidden
           />
-          <aside className="absolute inset-y-0 left-0 flex w-64 flex-col border-r border-hairline bg-canvas">
-            <SidebarContent onNavigate={() => setDrawer(false)} />
+          <aside
+            className="absolute inset-y-0 left-0 flex w-64 flex-col border-r border-hairline bg-canvas"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navigation"
+          >
+            <SidebarContent onNavigate={() => setDrawer(false)} onClose={() => setDrawer(false)} />
           </aside>
         </div>
       ) : null}

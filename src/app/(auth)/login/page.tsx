@@ -15,7 +15,7 @@ export default async function LoginPage() {
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
           <h1 className="text-display-md uppercase">
-            Fertilizer<span className="text-primary">MSME</span>
+            Fertilizer<span className="text-primary-soft">MSME</span>
           </h1>
           <p className="mt-2 text-body-lg text-ink/80">
             Production · Inventory · QC · GST Invoicing
