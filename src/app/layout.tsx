@@ -28,6 +28,9 @@ export default function RootLayout({
       lang="en"
       className={`${hanken.variable} ${inter.variable} h-full antialiased`}
     >
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
       <body className="min-h-full">{children}</body>
     </html>
   );
